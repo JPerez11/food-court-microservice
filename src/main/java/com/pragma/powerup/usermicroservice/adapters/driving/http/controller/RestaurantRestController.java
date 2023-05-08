@@ -1,7 +1,6 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
-import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.PersonResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.RestaurantHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,9 +65,11 @@ public class RestaurantRestController {
     @Operation(summary = "Get a restaurant by id",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Restaurant returned",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PersonResponseDto.class))),
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = RestaurantResponseDto.class))),
                     @ApiResponse(responseCode = "404", description = "Restaurant not found with that id",
-                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponseDto> getProvider(@PathVariable Long id) {
         return ResponseEntity.ok(restaurantHandler.getRestaurantById(id));
