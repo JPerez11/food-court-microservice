@@ -2,10 +2,8 @@ package com.pragma.powerup.usermicroservice.configuration;
 
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.PersonMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.RestaurantMysqlAdapter;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.RoleMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.UserMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.IPersonEntityMapper;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.IRoleEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.IUserEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.RestaurantEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.IPersonRepository;
@@ -13,16 +11,13 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositorie
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.IUserRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantRepository;
 import com.pragma.powerup.usermicroservice.domain.api.IPersonServicePort;
-import com.pragma.powerup.usermicroservice.domain.api.IRoleServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.IUserServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantServicePort;
 import com.pragma.powerup.usermicroservice.domain.spi.IPersonPersistencePort;
-import com.pragma.powerup.usermicroservice.domain.spi.IRolePersistencePort;
 import com.pragma.powerup.usermicroservice.domain.spi.IUserPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.spi.RestaurantPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.usecase.PersonUseCase;
 import com.pragma.powerup.usermicroservice.domain.usecase.RestaurantUseCase;
-import com.pragma.powerup.usermicroservice.domain.usecase.RoleUseCase;
 import com.pragma.powerup.usermicroservice.domain.usecase.UserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,19 +31,10 @@ public class BeanConfiguration {
     private final IPersonRepository personRepository;
     private final IUserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
-    private final IRoleEntityMapper roleEntityMapper;
     private final IPersonEntityMapper personEntityMapper;
     private final IUserEntityMapper userEntityMapper;
     private final RestaurantEntityMapper restaurantEntityMapper;
     private final PasswordEncoder passwordEncoder;
-    @Bean
-    public IRoleServicePort roleServicePort() {
-        return new RoleUseCase(rolePersistencePort());
-    }
-    @Bean
-    public IRolePersistencePort rolePersistencePort() {
-        return new RoleMysqlAdapter(roleRepository, roleEntityMapper);
-    }
     @Bean
     public IPersonServicePort personServicePort() {
         return new PersonUseCase(personPersistencePort());
