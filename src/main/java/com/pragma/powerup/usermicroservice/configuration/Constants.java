@@ -9,7 +9,7 @@ public class Constants {
     public static final Long CLIENT_ROLE_ID = 1L;
     public static final Long EMPLOYEE_ROLE_ID = 2L;
     public static final Long PROVIDER_ROLE_ID = 3L;
-    public static final int MAX_PAGE_SIZE = 2;
+    public static final int MAX_PAGE_SIZE = 10;
     public static final String RESPONSE_MESSAGE_KEY = "message";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
     public static final String WRONG_CREDENTIALS_MESSAGE = "Wrong credentials";
@@ -18,7 +18,6 @@ public class Constants {
     public static final String MAIL_ALREADY_EXISTS_MESSAGE = "A person with that mail already exists";
     public static final String PERSON_NOT_FOUND_MESSAGE = "No person found with the id provided";
     public static final String USER_CREATED_MESSAGE = "User created successfully";
-    public static final String USER_DELETED_MESSAGE = "User deleted successfully";
     public static final String USER_NOT_FOUND_MESSAGE = "No user found with the role provided";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String ROLE_NOT_FOUND_MESSAGE = "No role found with the id provided";
@@ -26,6 +25,10 @@ public class Constants {
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with that id";
     public static final String RESTAURANT_NOT_FOUND_MESSAGE = "The restaurant not found with that id";
+    public static final String DISH_CREATED_MESSAGE = "Dish created successfully";
+    public static final String DISH_UPDATED_MESSAGE = "Dish updated successfully";
+    public static final String DISH_ALREADY_EXISTS_MESSAGE = "A dish already exists with that id";
+    public static final String DISH_NOT_FOUND_MESSAGE = "The dish not found with that id";
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
