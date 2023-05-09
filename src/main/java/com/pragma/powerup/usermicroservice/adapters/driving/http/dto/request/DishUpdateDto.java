@@ -13,9 +13,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DishUpdateDto {
 
-    @NotBlank
+    @NotBlank(message = "Description must not be empty")
     private String description;
-    @Min(1)
+    @Min(value = 1, message = "The price must be a positive number greater than 0")
     private int price;
 
 }

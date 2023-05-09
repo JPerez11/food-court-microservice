@@ -1,4 +1,4 @@
-package com.pragma.powerup.usermicroservice.configuration;
+package com.pragma.powerup.usermicroservice.configuration.utils;
 
 public class Constants {
 
@@ -11,6 +11,7 @@ public class Constants {
     public static final Long PROVIDER_ROLE_ID = 3L;
     public static final int MAX_PAGE_SIZE = 10;
     public static final String RESPONSE_MESSAGE_KEY = "message";
+    public static final String RESPONSE_DATA_KEY = "data";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
     public static final String WRONG_CREDENTIALS_MESSAGE = "Wrong credentials";
     public static final String PERSON_CREATED_MESSAGE = "Person created successfully";
@@ -30,6 +31,7 @@ public class Constants {
     public static final String DISH_ALREADY_EXISTS_MESSAGE = "A dish already exists with that id";
     public static final String DISH_NOT_FOUND_MESSAGE = "The dish not found with that id";
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
+    public static final String CATEGORY_NOT_FOUND_MESSAGE = "The category not found with that id";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
     public static final String SWAGGER_VERSION_MESSAGE = "1.0.0";

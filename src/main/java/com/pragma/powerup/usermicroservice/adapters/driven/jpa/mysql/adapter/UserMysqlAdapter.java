@@ -13,7 +13,7 @@ import com.pragma.powerup.usermicroservice.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.pragma.powerup.usermicroservice.configuration.Constants.PROVIDER_ROLE_ID;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.PROVIDER_ROLE_ID;
 
 @RequiredArgsConstructor
 @Transactional

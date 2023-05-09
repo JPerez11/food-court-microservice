@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.pragma.powerup.usermicroservice.configuration.Constants.RESPONSE_MESSAGE_KEY;
-import static com.pragma.powerup.usermicroservice.configuration.Constants.RESTAURANT_CREATED_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESPONSE_MESSAGE_KEY;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_CREATED_MESSAGE;
 
 @RestController
 @RequestMapping("/restaurant")

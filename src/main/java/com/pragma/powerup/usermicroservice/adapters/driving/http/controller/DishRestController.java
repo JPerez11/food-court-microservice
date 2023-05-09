@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.pragma.powerup.usermicroservice.configuration.Constants.DISH_CREATED_MESSAGE;
-import static com.pragma.powerup.usermicroservice.configuration.Constants.DISH_UPDATED_MESSAGE;
-import static com.pragma.powerup.usermicroservice.configuration.Constants.RESPONSE_MESSAGE_KEY;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_CREATED_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_UPDATED_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESPONSE_DATA_KEY;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESPONSE_MESSAGE_KEY;
 
 @RestController
 @RequestMapping("/dish")
@@ -48,7 +51,7 @@ public class DishRestController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/")
-    public ResponseEntity<Map<String, String>> createDish(@RequestBody DishRequestDto dishRequest) {
+    public ResponseEntity<Map<String, String>> createDish(@Valid @RequestBody DishRequestDto dishRequest) {
         dishHandler.createDish(dishRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(RESPONSE_MESSAGE_KEY, DISH_CREATED_MESSAGE));
@@ -77,7 +80,8 @@ public class DishRestController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("/{id}")
-    public ResponseEntity<DishResponseDto> getProvider(@PathVariable Long id) {
+    public ResponseEntity<DishResponseDto> getProvider(@Parameter(description = "Dish id")
+                                                           @PathVariable Long id) {
         return ResponseEntity.ok(dishHandler.getDishById(id));
     }
 
@@ -90,11 +94,14 @@ public class DishRestController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @PatchMapping("/{id}")
-    public ResponseEntity<Map<String, String>> updateDish(@PathVariable Long id,
-                                                          @RequestBody DishUpdateDto dishUpdate) {
-        dishHandler.updateDish(id, dishUpdate);
+    public ResponseEntity<Map<String, Object>> updateDish(@Parameter(description = "Dish id to update")
+                                                              @PathVariable Long id,
+                                                          @Valid @RequestBody DishUpdateDto dishUpdate) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put(RESPONSE_MESSAGE_KEY, DISH_UPDATED_MESSAGE);
+        response.put(RESPONSE_DATA_KEY, dishHandler.updateDish(id, dishUpdate));
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Collections.singletonMap(RESPONSE_MESSAGE_KEY, DISH_UPDATED_MESSAGE));
+                .body(response);
     }
 
 

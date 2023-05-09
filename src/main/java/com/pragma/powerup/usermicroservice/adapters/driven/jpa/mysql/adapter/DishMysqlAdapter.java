@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.pragma.powerup.usermicroservice.configuration.Constants.MAX_PAGE_SIZE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.MAX_PAGE_SIZE;
 
 @Transactional
 @RequiredArgsConstructor

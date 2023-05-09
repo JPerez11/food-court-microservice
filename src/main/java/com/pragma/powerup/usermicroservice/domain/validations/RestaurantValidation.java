@@ -16,9 +16,9 @@ public class RestaurantValidation {
     private static Matcher matcher;
     private static Map<String, String> exceptionMap;
     private static final String EMPTY_FIELD = "This field cannot empty";
-    private static final String FORMAT_INVALID = "The format is invalid";
-    private static final String REGEX_PHONE_NUMBER = "^\\+?\\d{9,12}$";
-    private static final String REGEX_DOCUMENT_NUMBER = "^\\d{9,13}$";
+    private static final String INVALID_FORMAT = "The format is invalid";
+    private static final String PHONE_NUMBER_REGEX = "^\\+?\\d{9,12}$";
+    private static final String DOCUMENT_NUMBER_REGEX = "^\\d{9,13}$";
 
     private RestaurantValidation() {}
 
@@ -40,9 +40,9 @@ public class RestaurantValidation {
         validateField(restaurantModel.getLogoUrl(), "birthdate", EMPTY_FIELD,
                 RestaurantValidation::isStringEmpty);
         //Validate data if badly formatted
-        validateField(restaurantModel.getTaxIdNumber(), "nit format", FORMAT_INVALID,
+        validateField(restaurantModel.getTaxIdNumber(), "nit format", INVALID_FORMAT,
                 RestaurantValidation::isDocumentValid);
-        validateField(restaurantModel.getPhoneNumber(), "phone format", FORMAT_INVALID,
+        validateField(restaurantModel.getPhoneNumber(), "phone format", INVALID_FORMAT,
                 RestaurantValidation::isPhoneValid);
 
         if (!exceptionMap.isEmpty()) {
@@ -74,7 +74,7 @@ public class RestaurantValidation {
      */
     private static boolean isDocumentValid(String document) {
         pattern = Pattern
-                .compile(REGEX_DOCUMENT_NUMBER);
+                .compile(DOCUMENT_NUMBER_REGEX);
         matcher = pattern.matcher(document);
         return !matcher.find();
     }
@@ -86,7 +86,7 @@ public class RestaurantValidation {
      */
     private static boolean isPhoneValid(String phone) {
         pattern = Pattern
-                .compile(REGEX_PHONE_NUMBER);
+                .compile(PHONE_NUMBER_REGEX);
         matcher = pattern.matcher(phone);
         return !matcher.find();
     }
