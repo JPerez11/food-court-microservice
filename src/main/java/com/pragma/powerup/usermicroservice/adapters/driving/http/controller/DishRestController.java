@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ public class DishRestController {
 
     private final DishHandler dishHandler;
 
+    @Secured({"OWNER"})
     @Operation(summary = "Add a dish",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Dish created",
@@ -85,6 +87,7 @@ public class DishRestController {
         return ResponseEntity.ok(dishHandler.getDishById(id));
     }
 
+    @Secured({"OWNER"})
     @Operation(summary = "Update a new dish",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Dish updated",

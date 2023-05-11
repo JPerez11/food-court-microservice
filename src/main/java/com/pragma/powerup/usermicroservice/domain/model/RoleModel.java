@@ -1,16 +1,39 @@
 package com.pragma.powerup.usermicroservice.domain.model;
 
-public class Role {
+/**
+ * @author Author Jhoan Perez
+ * Role POJO class for business logic
+ */
+public class RoleModel {
+
+    /**
+     * Role class attributes
+     */
     private Long id;
     private String name;
     private String description;
 
-    public Role(Long id, String name, String description) {
+    /**
+     * Empty constructor
+     */
+    public RoleModel() {
+    }
+
+    /**
+     * Constructor with all parameters
+     * @param id is the identifier
+     * @param name is the name
+     * @param description is the description
+     */
+    public RoleModel(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
 
+    /**
+     * getter and setter methods of the class
+     */
     public Long getId() {
         return id;
     }

@@ -16,11 +16,11 @@ public class RestaurantRequestDto {
     @NotBlank @Pattern(regexp = "^(?=.*[a-zA-Z])[a-zA-Z\\d]*$",
             message = "The name of the restaurant cannot be just numbers")
     private String name;
-    @NotBlank @Pattern(regexp = "^\\d{8,12}$")
+    @NotBlank @Pattern(regexp = "^\\d{9,13}$")
     private String taxIdNumber;
     @NotBlank
     private String address;
-    @NotBlank @Pattern(regexp = "^\\+?\\d{10,12}$")
+    @NotBlank @Pattern(regexp = "^\\+?\\d{9,12}$")
     private String phoneNumber;
     @NotBlank
     private String logoUrl;
