@@ -2,6 +2,7 @@ package com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class RestaurantRequestDto {
     @NotBlank(message = "The logo URL must not be empty")
     private String logoUrl;
     @Min(value = 1, message = "The id must be a number greater than 0")
-    @NotBlank(message = "Owner id must not be empty")
+    @NotNull(message = "Owner id must not be empty")
     private Long idOwner;
 
 }

@@ -46,7 +46,7 @@ public class RestaurantRestController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/")
-    public ResponseEntity<Map<String, String>> createUser(@Valid @RequestBody RestaurantRequestDto restaurantRequest) {
+    public ResponseEntity<Map<String, String>> createRestaurant(@Valid @RequestBody RestaurantRequestDto restaurantRequest) {
         restaurantHandler.createRestaurant(restaurantRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(RESPONSE_MESSAGE_KEY, RESTAURANT_CREATED_MESSAGE));
@@ -74,7 +74,7 @@ public class RestaurantRestController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("/{id}")
-    public ResponseEntity<RestaurantResponseDto> getProvider(@PathVariable Long id) {
+    public ResponseEntity<RestaurantResponseDto> getRestaurantById(@PathVariable Long id) {
         return ResponseEntity.ok(restaurantHandler.getRestaurantById(id));
     }
 }
