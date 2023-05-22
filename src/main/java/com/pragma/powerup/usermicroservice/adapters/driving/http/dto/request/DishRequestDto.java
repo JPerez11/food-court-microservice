@@ -3,7 +3,6 @@ package com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,6 @@ public class DishRequestDto {
     private String name;
     @NotBlank(message = "Description must not be empty")
     private String description;
-    @Pattern(regexp = "^\\d+$", message = "The price must be an integer")
     @Min(value = 1, message = "The price must be a positive number greater than 0")
     private int price;
     @NotBlank(message = "The image url must not be empty")

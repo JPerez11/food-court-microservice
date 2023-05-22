@@ -82,7 +82,7 @@ public class DishRestController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("/{id}")
-    public ResponseEntity<DishResponseDto> getProvider(@Parameter(description = "Dish id")
+    public ResponseEntity<DishResponseDto> getDishById(@Parameter(description = "Dish id")
                                                            @PathVariable Long id) {
         return ResponseEntity.ok(dishHandler.getDishById(id));
     }
