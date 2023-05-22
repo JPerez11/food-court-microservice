@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.controller.factory.DishControllerTestDataFactory;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishRequestDto;
+import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishUpdateDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.DishHandler;
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -98,6 +100,23 @@ class DishRestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void shouldUpdateDish() throws Exception {
+        //Given
+        DishUpdateDto expected = DishControllerTestDataFactory.getDishUpdateFromSetters();
+        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example");
+
+        //When
+        mockMvc.perform(patch("/dish/1")
+                        .header("Authorization", "Bearer " + token)
+                        .content(asJsonString(expected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value(Constants.DISH_UPDATED_MESSAGE));
 
     }
     private String asJsonString(Object object) throws JsonProcessingException {

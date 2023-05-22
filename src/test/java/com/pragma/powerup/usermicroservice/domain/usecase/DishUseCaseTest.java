@@ -113,4 +113,18 @@ class DishUseCaseTest {
         });
     }
 
+    @Test
+    void shouldUpdateDish() {
+        //Given
+        DishModel expect = DishTestDataFactory.getDishFromSetters();
+
+        //When
+        Mockito.when(dishPersistencePort.updateDish(1L, expect)).thenReturn(expect);
+        dishUseCase.updateDish(1L, expect);
+
+        //Then
+        Mockito.verify(dishPersistencePort).updateDish(1L, expect);
+
+    }
+
 }
