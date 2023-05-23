@@ -49,6 +49,9 @@ public class DishRestController {
                     @ApiResponse(responseCode = "201", description = "Dish created",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "403", description = "dish doesn't belong to the user",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(ref = "#/components/schemas/Error"))),
                     @ApiResponse(responseCode = "409", description = "Dish already exists",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
@@ -93,6 +96,9 @@ public class DishRestController {
                     @ApiResponse(responseCode = "201", description = "Dish updated",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "403", description = "dish doesn't belong to the user",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error"))),
                     @ApiResponse(responseCode = "409", description = "Dish already exists",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})

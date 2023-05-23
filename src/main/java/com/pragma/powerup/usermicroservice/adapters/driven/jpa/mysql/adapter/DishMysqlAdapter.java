@@ -4,11 +4,13 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.entity.Dish
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.DishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.CategoryRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.DishRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantRepository;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.utils.ExtractAuthorization;
 import com.pragma.powerup.usermicroservice.domain.model.DishModel;
 import com.pragma.powerup.usermicroservice.domain.spi.DishPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.MAX_PAGE_SIZE;
 
@@ -33,13 +36,17 @@ public class DishMysqlAdapter implements DishPersistencePort {
     @Override
     public void createDish(DishModel dishModel) {
         DishEntity dishEntity = dishEntityMapper.toDishEntity(dishModel);
-        dishEntity.setCategoryEntity(
-                categoryRepository.findById(dishModel.getCategoryModel().getId())
-                        .orElseThrow(CategoryNotFoundException::new)
-        );
         dishEntity.setRestaurantEntity(
                 restaurantRepository.findById(dishModel.getRestaurantModel().getId())
                         .orElseThrow(RestaurantNotFoundException::new)
+        );
+        Long authenticatedUserId = ExtractAuthorization.getAuthenticatedUserId();
+        if (!Objects.equals(dishEntity.getRestaurantEntity().getIdOwner(), authenticatedUserId)) {
+            throw new OwnerNotAuthorizedForUpdateException();
+        }
+        dishEntity.setCategoryEntity(
+                categoryRepository.findById(dishModel.getCategoryModel().getId())
+                        .orElseThrow(CategoryNotFoundException::new)
         );
         dishRepository.save(dishEntity);
     }
@@ -66,6 +73,13 @@ public class DishMysqlAdapter implements DishPersistencePort {
     public DishModel updateDish(Long id, DishModel dishModel) {
         DishEntity dishEntityDb = dishRepository.findById(id)
                 .orElseThrow(DishNotFoundException::new);
+        Long authenticatedUserId = ExtractAuthorization.getAuthenticatedUserId();
+        if (!Objects.equals(dishEntityDb.getRestaurantEntity().getIdOwner(), authenticatedUserId)) {
+            throw new OwnerNotAuthorizedForUpdateException();
+        }
+        if (dishModel == null) {
+            throw new NullPointerException();
+        }
         dishEntityDb.setDescription( dishModel.getDescription() );
         dishEntityDb.setPrice( dishModel.getPrice() );
 

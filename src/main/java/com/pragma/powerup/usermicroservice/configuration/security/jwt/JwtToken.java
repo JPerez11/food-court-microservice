@@ -19,14 +19,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ACCESS_TOKEN_SECRET;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
+
 /**
  * Class to create the token and extract its data.
  */
 public class JwtToken {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtToken.class);
-    private static final String ROLES = "roles";
-    private static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
-    private static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 3600L;
+    private static final String ROLE = "role";
 
     private JwtToken () {}
 
@@ -48,7 +49,7 @@ public class JwtToken {
         //Set subject email in JWT
         Claims claims = Jwts.claims().setSubject(email);
         //Set the role in JWT
-        claims.put(ROLES, role);
+        claims.put(ROLE, role);
 
         //Token generation and return
         return Jwts.builder()
@@ -74,7 +75,7 @@ public class JwtToken {
             //Extract the email from the token
             String email = claims.getSubject();
             //Extract the role from the token
-            String role = (String) claims.get(ROLES);
+            String role = (String) claims.get(ROLE);
             //Create an Authorities with the role
             Collection<? extends GrantedAuthority> authorities =
                     Collections.singletonList(new SimpleGrantedAuthority(role));
@@ -95,15 +96,15 @@ public class JwtToken {
             Jwts.parserBuilder().setSigningKey(ACCESS_TOKEN_SECRET.getBytes()).build().parseClaimsJws(token);
             return true;
         } catch (MalformedJwtException e) {
-            LOGGER.error("token mal formado");
+            LOGGER.error("Malformed token");
         } catch (UnsupportedJwtException e) {
-            LOGGER.error("token no soportado");
+            LOGGER.error("Unsupported token");
         } catch (ExpiredJwtException e) {
-            LOGGER.error("token expirado");
+            LOGGER.error("Expired token");
         } catch (IllegalArgumentException e) {
-            LOGGER.error("token vacío");
+            LOGGER.error("Empty token");
         } catch (SignatureException e) {
-            LOGGER.error("fail en la firma");
+            LOGGER.error("Signature failure");
         }
         return false;
     }

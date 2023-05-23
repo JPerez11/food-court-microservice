@@ -4,6 +4,7 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdException;
@@ -30,6 +31,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.NO_DATA_FOUND_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.OWNER_NOT_AUTHORIZED_FOR_UPDATE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESPONSE_ERROR_MESSAGE_KEY;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_NOT_FOUND_MESSAGE;
@@ -113,6 +115,12 @@ public class ControllerAdvisor {
             DishNotFoundException dishNotFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_NOT_FOUND_MESSAGE));
+    }
+    @ExceptionHandler(OwnerNotAuthorizedForUpdateException.class)
+    public ResponseEntity<Map<String, String>> handleOwnerNotAuthorizedForUpdateException(
+            OwnerNotAuthorizedForUpdateException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, OWNER_NOT_AUTHORIZED_FOR_UPDATE_MESSAGE));
     }
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleCategoryNotFoundException(

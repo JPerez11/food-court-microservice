@@ -23,8 +23,11 @@ public class Constants {
     public static final String DISH_UPDATED_MESSAGE = "Dish updated successfully";
     public static final String DISH_ALREADY_EXISTS_MESSAGE = "A dish already exists with that id";
     public static final String DISH_NOT_FOUND_MESSAGE = "The dish not found with that id";
+    public static final String OWNER_NOT_AUTHORIZED_FOR_UPDATE_MESSAGE = "Owner not authorized to update this dish";
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "The category not found with that id";
+    public static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
+    public static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 3600L;
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
     public static final String SWAGGER_VERSION_MESSAGE = "1.0.0";
