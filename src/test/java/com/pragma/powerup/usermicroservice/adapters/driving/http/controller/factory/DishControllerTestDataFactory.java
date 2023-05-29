@@ -1,6 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.controller.factory;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishRequestDto;
+import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishStatusUpdateDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishUpdateDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import io.jsonwebtoken.Claims;
@@ -61,6 +62,12 @@ public class DishControllerTestDataFactory {
         DishUpdateDto request = new DishUpdateDto();
         request.setDescription("dishDescription");
         request.setPrice(20_000);
+
+        return request;
+    }
+    public static DishStatusUpdateDto getDishStatusUpdateFromSetters() {
+        DishStatusUpdateDto request = new DishStatusUpdateDto();
+        request.setActive(true);
 
         return request;
     }

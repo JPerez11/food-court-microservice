@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.controller.factory.DishControllerTestDataFactory;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishRequestDto;
+import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishStatusUpdateDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishUpdateDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.DishHandler;
@@ -54,7 +55,7 @@ class DishRestControllerTest {
     void shouldCreateDish() throws Exception {
         //Given
         DishRequestDto expected = DishControllerTestDataFactory.getDishRequestFromSetters();
-        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example");
+        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example.com");
 
         //When
         mockMvc.perform(post("/dish/")
@@ -74,7 +75,7 @@ class DishRestControllerTest {
     void shouldGetDishById() throws Exception {
         //Given
         DishResponseDto expected = DishControllerTestDataFactory.getDishResponseFromConstructor();
-        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example");
+        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example.com");
 
         //When
         mockMvc.perform(get("/dish/1")
@@ -90,7 +91,7 @@ class DishRestControllerTest {
     void shouldGetAllDishes() throws Exception {
         //Given
         List<DishResponseDto> expected = DishControllerTestDataFactory.getDishesList();
-        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example");
+        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example.com");
 
         //When
         mockMvc.perform(get("/dish/all")
@@ -107,10 +108,10 @@ class DishRestControllerTest {
     void shouldUpdateDish() throws Exception {
         //Given
         DishUpdateDto expected = DishControllerTestDataFactory.getDishUpdateFromSetters();
-        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example");
+        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example.com");
 
         //When
-        mockMvc.perform(patch("/dish/1")
+        mockMvc.perform(patch("/dish/update/1")
                         .header("Authorization", "Bearer " + token)
                         .content(asJsonString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,6 +120,24 @@ class DishRestControllerTest {
                 .andExpect(jsonPath("$.message").value(Constants.DISH_UPDATED_MESSAGE));
 
     }
+
+    @Test
+    void shouldUpdateDishStatus() throws Exception {
+        //Given
+        DishStatusUpdateDto expected = DishControllerTestDataFactory.getDishStatusUpdateFromSetters();
+        String token = DishControllerTestDataFactory.getToken("OWNER", "test@example.com");
+
+        //When
+        mockMvc.perform(patch("/dish/update/status/1")
+                        .header("Authorization", "Bearer " + token)
+                        .content(asJsonString(expected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value(Constants.DISH_UPDATED_MESSAGE));
+
+    }
+
     private String asJsonString(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = JsonMapper.builder()
                 .addModule(new JavaTimeModule())
