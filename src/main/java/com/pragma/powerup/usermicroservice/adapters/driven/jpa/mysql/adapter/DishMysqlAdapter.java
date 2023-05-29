@@ -71,19 +71,36 @@ public class DishMysqlAdapter implements DishPersistencePort {
 
     @Override
     public DishModel updateDish(Long id, DishModel dishModel) {
-        DishEntity dishEntityDb = dishRepository.findById(id)
-                .orElseThrow(DishNotFoundException::new);
+        DishEntity dishDb = getDishToUpdate(id, dishModel);
+        dishDb.setDescription( dishModel.getDescription() );
+        dishDb.setPrice( dishModel.getPrice() );
+
+        return dishEntityMapper.toDishModel(
+                dishRepository.save(dishDb));
+    }
+
+    @Override
+    public DishModel updateDishStatus(Long id, DishModel dishModel) {
+        DishEntity dishDb = getDishToUpdate(id, dishModel);
+
+        dishDb.setActive( dishModel.isActive() );
+
+        return dishEntityMapper.toDishModel(
+                dishRepository.save(dishDb)
+        );
+    }
+
+    /* Method to obtain the dish and validate owner */
+    private DishEntity getDishToUpdate(Long id, DishModel dishModel) {
+        DishEntity dishDb = dishRepository.findById(id).orElseThrow(DishNotFoundException::new);
         Long authenticatedUserId = ExtractAuthorization.getAuthenticatedUserId();
-        if (!Objects.equals(dishEntityDb.getRestaurantEntity().getIdOwner(), authenticatedUserId)) {
+
+        if (!Objects.equals(dishDb.getRestaurantEntity().getIdOwner(), authenticatedUserId)) {
             throw new OwnerNotAuthorizedForUpdateException();
         }
         if (dishModel == null) {
             throw new NullPointerException();
         }
-        dishEntityDb.setDescription( dishModel.getDescription() );
-        dishEntityDb.setPrice( dishModel.getPrice() );
-
-        return dishEntityMapper.toDishModel(
-                dishRepository.save(dishEntityDb));
+        return dishDb;
     }
 }

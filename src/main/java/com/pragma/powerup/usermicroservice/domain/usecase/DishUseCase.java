@@ -39,4 +39,9 @@ public class DishUseCase implements DishServicePort {
     public DishModel updateDish(Long id, DishModel dishModel) {
         return dishPersistencePort.updateDish(id, dishModel);
     }
+
+    @Override
+    public DishModel updateDishStatus(Long id, DishModel dishModel) {
+        return dishPersistencePort.updateDishStatus(id, dishModel);
+    }
 }

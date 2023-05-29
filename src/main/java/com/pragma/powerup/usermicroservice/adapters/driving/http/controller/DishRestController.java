@@ -2,6 +2,7 @@ package com.pragma.powerup.usermicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishUpdateDto;
+import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishStatusUpdateDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.DishHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -91,7 +92,7 @@ public class DishRestController {
     }
 
     @Secured({"OWNER"})
-    @Operation(summary = "Update a new dish",
+    @Operation(summary = "Update a dish price and description",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Dish updated",
                             content = @Content(mediaType = "application/json",
@@ -102,13 +103,35 @@ public class DishRestController {
                     @ApiResponse(responseCode = "409", description = "Dish already exists",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
-    @PatchMapping("/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> updateDish(@Parameter(description = "Dish id to update")
                                                               @PathVariable Long id,
                                                           @Valid @RequestBody DishUpdateDto dishUpdate) {
         Map<String, Object> response = new LinkedHashMap<>();
         response.put(RESPONSE_MESSAGE_KEY, DISH_UPDATED_MESSAGE);
         response.put(RESPONSE_DATA_KEY, dishHandler.updateDish(id, dishUpdate));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
+    }
+    @Secured({"OWNER"})
+    @Operation(summary = "Update a dish status",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Dish updated",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "403", description = "dish doesn't belong to the user",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "409", description = "Dish already exists",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PatchMapping("/update/status/{id}")
+    public ResponseEntity<Map<String, Object>> updateDishStatus(@Parameter(description = "Dish id to update")
+                                                              @PathVariable Long id,
+                                                          @Valid @RequestBody DishStatusUpdateDto dishUpdateStatus) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put(RESPONSE_MESSAGE_KEY, DISH_UPDATED_MESSAGE);
+        response.put(RESPONSE_DATA_KEY, dishHandler.updateDishStatus(id, dishUpdateStatus));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }

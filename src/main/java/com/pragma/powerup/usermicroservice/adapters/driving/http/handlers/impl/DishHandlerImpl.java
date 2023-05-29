@@ -2,6 +2,7 @@ package com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.impl;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishUpdateDto;
+import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishStatusUpdateDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.DishHandler;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.mapper.DishRequestMapper;
@@ -46,6 +47,15 @@ public class DishHandlerImpl implements DishHandler {
         return dishResponseMapper.toDishResponse(
                 dishServicePort.updateDish(id, dishRequestMapper.toDishModelUpdate(
                         dishUpdateDto
+                ))
+        );
+    }
+
+    @Override
+    public DishResponseDto updateDishStatus(Long id, DishStatusUpdateDto dishUpdateStatus) {
+        return dishResponseMapper.toDishResponse(
+                dishServicePort.updateDishStatus(id, dishRequestMapper.toDishModelStatusUpdate(
+                        dishUpdateStatus
                 ))
         );
     }

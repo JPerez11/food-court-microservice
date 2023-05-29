@@ -13,4 +13,6 @@ public interface DishPersistencePort {
     List<DishModel> getAllDishes(int page);
 
     DishModel updateDish(Long id, DishModel dishModel);
+
+    DishModel updateDishStatus(Long id, DishModel dishModel);
 }

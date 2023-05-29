@@ -15,7 +15,7 @@ public class DishResponseDto {
     private String description;
     private int price;
     private String imageUrl;
-    private boolean active = true;
+    private boolean active;
     private String category;
 
 }
