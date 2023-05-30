@@ -9,6 +9,6 @@ public interface RestaurantHandler {
 
     void createRestaurant(RestaurantRequestDto restaurantRequest);
     RestaurantResponseDto getRestaurantById(Long id);
-    List<RestaurantResponseDto> getAllRestaurants();
+    List<RestaurantResponseDto> getAllRestaurants(int pageNumber, int pageSize);
 
 }

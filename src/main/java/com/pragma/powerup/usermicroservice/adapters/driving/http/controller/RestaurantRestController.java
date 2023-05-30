@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
@@ -46,23 +47,26 @@ public class RestaurantRestController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/")
-    public ResponseEntity<Map<String, String>> createRestaurant(@Valid @RequestBody RestaurantRequestDto restaurantRequest) {
+    public ResponseEntity<Map<String, String>> createRestaurant(
+            @Valid @RequestBody RestaurantRequestDto restaurantRequest) {
         restaurantHandler.createRestaurant(restaurantRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(RESPONSE_MESSAGE_KEY, RESTAURANT_CREATED_MESSAGE));
     }
 
+    @Secured({"CUSTOMER"})
     @Operation(summary = "Get all the restaurants",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "All restaurants returned",
+                    @ApiResponse(responseCode = "200", description = "All restaurants returned ",
                             content = @Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = RestaurantResponseDto.class)))),
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("/all")
-    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants() {
-        return ResponseEntity.ok(restaurantHandler.getAllRestaurants());
+    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants(
+            @Valid @RequestParam int pageNumber, @RequestParam int pageSize) {
+        return ResponseEntity.ok(restaurantHandler.getAllRestaurants(pageNumber, pageSize));
     }
 
     @Operation(summary = "Get a restaurant by id",

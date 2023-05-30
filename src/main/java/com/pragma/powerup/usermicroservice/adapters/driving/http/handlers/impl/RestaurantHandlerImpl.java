@@ -34,9 +34,9 @@ public class RestaurantHandlerImpl implements RestaurantHandler {
     }
 
     @Override
-    public List<RestaurantResponseDto> getAllRestaurants() {
+    public List<RestaurantResponseDto> getAllRestaurants(int pageNumber, int pageSize) {
         return restaurantResponseMapper.toRestaurantResponseList(
-                restaurantServicePort.getAllRestaurants()
+                restaurantServicePort.getAllRestaurants(pageNumber, pageSize)
         );
     }
 }

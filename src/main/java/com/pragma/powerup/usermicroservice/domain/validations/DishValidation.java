@@ -8,15 +8,12 @@ import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DishValidation {
 
     private static Map<String, String> exceptionMap;
     private static final String EMPTY_FIELD = "This field cannot empty";
     private static final String INVALID_PRICE_FORMAT = "The price must be an integer";
-    private static final String REGEX_PRICE = "^\\d+$";
 
     private DishValidation() {}
 
@@ -44,7 +41,7 @@ public class DishValidation {
     }
 
     private static void validatePrice(int field) {
-        if (isPriceValid(field)) {
+        if (field <= 0) {
             exceptionMap.put("price", INVALID_PRICE_FORMAT);
         }
     }
@@ -63,14 +60,6 @@ public class DishValidation {
 
     private static boolean isStringEmpty(String data) {
         return data.trim().isEmpty();
-    }
-
-    private static boolean isPriceValid(int price) {
-        Pattern pattern = Pattern
-                .compile(REGEX_PRICE);
-        Matcher matcher = pattern
-                .matcher(String.valueOf(price));
-        return !matcher.find();
     }
 
     public static void getDishValidation(DishModel dishModel) {

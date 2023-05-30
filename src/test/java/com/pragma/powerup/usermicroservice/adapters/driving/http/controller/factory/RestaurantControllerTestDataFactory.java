@@ -2,7 +2,6 @@ package com.pragma.powerup.usermicroservice.adapters.driving.http.controller.fac
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -16,11 +15,7 @@ public class RestaurantControllerTestDataFactory {
     public static RestaurantResponseDto getRestaurantResponseFromSetters() {
         RestaurantResponseDto restaurantResponse = new RestaurantResponseDto();
         restaurantResponse.setName("restaurant1");
-        restaurantResponse.setTaxIdNumber("1234567890");
-        restaurantResponse.setAddress("test address");
-        restaurantResponse.setPhoneNumber("1234567890");
         restaurantResponse.setLogoUrl("https://logo-url-test.com");
-        restaurantResponse.setIdOwner(2L);
 
         return restaurantResponse;
     }
@@ -37,18 +32,6 @@ public class RestaurantControllerTestDataFactory {
         return restaurantRequest;
     }
 
-    public static RestaurantModel getRestaurantFromSetters() {
-        RestaurantModel restaurantModel = new RestaurantModel();
-        restaurantModel.setId(1L);
-        restaurantModel.setName("restaurant1");
-        restaurantModel.setTaxIdNumber("1234567890");
-        restaurantModel.setAddress("test address");
-        restaurantModel.setPhoneNumber("1234567890");
-        restaurantModel.setLogoUrl("https://logo-url-test.com");
-        restaurantModel.setIdOwner(2L);
-
-        return restaurantModel;
-    }
 
     public static String getToken(String role, String email) {
         Claims claims = Jwts.claims().setSubject(email);

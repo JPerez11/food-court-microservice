@@ -139,8 +139,8 @@ class RestaurantUseCaseTest {
         List<RestaurantModel> restaurantListExpected = RestaurantTestDataFactory.getRestaurantList();
 
         //When
-        when(restaurantPersistencePort.getAllRestaurants()).thenReturn(restaurantListExpected);
-        List<RestaurantModel> result = restaurantUseCase.getAllRestaurants();
+        when(restaurantPersistencePort.getAllRestaurants(0, 2)).thenReturn(restaurantListExpected);
+        List<RestaurantModel> result = restaurantUseCase.getAllRestaurants(0, 2);
 
         //Then
         assertEquals(restaurantListExpected, result);
@@ -153,7 +153,7 @@ class RestaurantUseCaseTest {
         assertEquals(restaurantListExpected.get(0).getIdOwner(), result.get(0).getIdOwner());
 
         //Verify
-        verify(restaurantPersistencePort).getAllRestaurants();
+        verify(restaurantPersistencePort).getAllRestaurants(0, 2);
     }
 
     @Test
@@ -162,11 +162,11 @@ class RestaurantUseCaseTest {
         List<RestaurantModel> expectedEmptyList = RestaurantTestDataFactory.getEmptyRestaurantList();
 
         //When
-        Mockito.when(restaurantPersistencePort.getAllRestaurants()).thenReturn(expectedEmptyList);
+        Mockito.when(restaurantPersistencePort.getAllRestaurants(0, 2)).thenReturn(expectedEmptyList);
 
         //Then
         assertThrows(ValidationModelException.class, () -> {
-            restaurantUseCase.getAllRestaurants();
+            restaurantUseCase.getAllRestaurants(0, 2);
         });
     }
 

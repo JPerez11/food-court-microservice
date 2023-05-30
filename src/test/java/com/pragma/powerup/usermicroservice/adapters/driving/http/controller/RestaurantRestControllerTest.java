@@ -91,10 +91,15 @@ class RestaurantRestControllerTest {
 
         String token =
                 RestaurantControllerTestDataFactory.getToken("ADMIN", "test@example.com");
+        int page = 0;
+        int size = 10;
         //When
 
         mockMvc.perform(get("/restaurant/all")
+                .param("pageNumber", String.valueOf(page))
+                .param("pageSize", String.valueOf(size))
                 .header("Authorization", "Bearer " + token)
+                .content(asJsonString(expectedRestaurantResponse))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         //Then
