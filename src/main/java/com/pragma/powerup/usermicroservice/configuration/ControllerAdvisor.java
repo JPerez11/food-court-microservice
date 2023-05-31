@@ -4,6 +4,7 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.OrderAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
@@ -31,6 +32,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.NO_DATA_FOUND_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.OWNER_NOT_AUTHORIZED_FOR_UPDATE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESPONSE_ERROR_MESSAGE_KEY;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_ALREADY_EXISTS_MESSAGE;
@@ -138,5 +140,11 @@ public class ControllerAdvisor {
     public ResponseEntity<String> handleFeignException(FeignException feignException) {
         return ResponseEntity.status(feignException.status())
                 .body(feignException.contentUTF8());
+    }
+    @ExceptionHandler(OrderAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleOrderAlreadyExistsException(
+            OrderAlreadyExistsException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_ALREADY_EXISTS_MESSAGE));
     }
 }

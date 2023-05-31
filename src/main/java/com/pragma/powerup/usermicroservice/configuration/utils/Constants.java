@@ -2,11 +2,13 @@ package com.pragma.powerup.usermicroservice.configuration.utils;
 
 public class Constants {
 
+
     private Constants() {
         throw new IllegalStateException("Utility class");
     }
 
     public static final String OWNER_ROLE_NAME = "OWNER";
+    public static final String CUSTOMER_ROLE = "CUSTOMER";
     public static final String RESPONSE_MESSAGE_KEY = "message";
     public static final String RESPONSE_DATA_KEY = "data";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
@@ -25,6 +27,9 @@ public class Constants {
     public static final String OWNER_NOT_AUTHORIZED_FOR_UPDATE_MESSAGE = "Owner not authorized to update this dish";
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found";
+    public static final String ORDER_CREATED_MESSAGE = "Order created successfully";
+    public static final String ORDER_ALREADY_EXISTS_MESSAGE = "Order already exists";
+    public static final String PENDING_STATUS = "PENDING";
     public static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
     public static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 3600L;
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
