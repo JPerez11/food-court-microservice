@@ -36,9 +36,9 @@ public class DishHandlerImpl implements DishHandler {
     }
 
     @Override
-    public List<DishResponseDto> getAllDishes(int page) {
+    public List<DishResponseDto> getPaginatedDishesByCategory(Long id, int page, int size, String category) {
         return dishResponseMapper.toDishResponseList(
-                dishServicePort.getAllDishes(page)
+                dishServicePort.getPaginatedDishesByCategory(id, page, size, category)
         );
     }
 

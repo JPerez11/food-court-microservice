@@ -29,8 +29,8 @@ public class DishUseCase implements DishServicePort {
     }
 
     @Override
-    public List<DishModel> getAllDishes(int page) {
-        List<DishModel> dishModelList = dishPersistencePort.getAllDishes(page);
+    public List<DishModel> getPaginatedDishesByCategory(Long id, int page, int size, String category) {
+        List<DishModel> dishModelList = dishPersistencePort.getPaginatedDishesByCategory(id, page, size, category);
         DishValidation.getAllDishesValidate(dishModelList);
         return dishModelList;
     }

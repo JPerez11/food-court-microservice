@@ -11,7 +11,7 @@ public interface DishHandler {
 
     void createDish(DishRequestDto dishRequest);
     DishResponseDto getDishById(Long id);
-    List<DishResponseDto> getAllDishes(int page);
+    List<DishResponseDto> getPaginatedDishesByCategory(Long id, int page, int size, String category);
     DishResponseDto updateDish(Long id, DishUpdateDto dishUpdateDto);
     DishResponseDto updateDishStatus(Long id, DishStatusUpdateDto dishUpdateStatus);
 

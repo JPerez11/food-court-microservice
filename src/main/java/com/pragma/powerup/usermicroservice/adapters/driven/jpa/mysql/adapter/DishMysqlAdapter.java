@@ -22,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.MAX_PAGE_SIZE;
-
 @Transactional
 @RequiredArgsConstructor
 public class DishMysqlAdapter implements DishPersistencePort {
@@ -60,9 +58,17 @@ public class DishMysqlAdapter implements DishPersistencePort {
     }
 
     @Override
-    public List<DishModel> getAllDishes(int page) {
-        Pageable pagination = PageRequest.of(page, MAX_PAGE_SIZE);
-        Page<DishEntity> dishEntityPage = dishRepository.findAll(pagination);
+    public List<DishModel> getPaginatedDishesByCategory(Long id, int page, int size, String category) {
+        if (!categoryRepository.existsByNameIgnoreCase(category)) {
+            throw new CategoryNotFoundException();
+        }
+        if (!restaurantRepository.existsById(id)) {
+            throw new RestaurantNotFoundException();
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        Page<DishEntity> dishEntityPage =
+                dishRepository.findAllByCategoryEntityNameContainingIgnoreCaseAndRestaurantEntityId(category, id,
+                        pageable);
         if (dishEntityPage.isEmpty()) {
             throw new NoDataFoundException();
         }

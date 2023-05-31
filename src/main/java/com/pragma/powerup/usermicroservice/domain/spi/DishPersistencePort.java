@@ -10,7 +10,7 @@ public interface DishPersistencePort {
 
     DishModel getDishById(Long id);
 
-    List<DishModel> getAllDishes(int page);
+    List<DishModel> getPaginatedDishesByCategory(Long id, int page, int size, String category);
 
     DishModel updateDish(Long id, DishModel dishModel);
 

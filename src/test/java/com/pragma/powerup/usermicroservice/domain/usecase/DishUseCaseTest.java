@@ -83,8 +83,8 @@ class DishUseCaseTest {
         List<DishModel> expected = DishTestDataFactory.getDishesList();
 
         //When
-        Mockito.when(dishPersistencePort.getAllDishes(0)).thenReturn(expected);
-        List<DishModel> actual = dishUseCase.getAllDishes(0);
+        Mockito.when(dishPersistencePort.getPaginatedDishesByCategory(1L,0, 10, "category")).thenReturn(expected);
+        List<DishModel> actual = dishUseCase.getPaginatedDishesByCategory(1L,0, 10, "category");
 
         //Then
         assertEquals(expected, actual);
@@ -105,11 +105,11 @@ class DishUseCaseTest {
         List<DishModel> expected = Collections.emptyList();
 
         //When
-        Mockito.when(dishPersistencePort.getAllDishes(0)).thenReturn(expected);
+        Mockito.when(dishPersistencePort.getPaginatedDishesByCategory(1L, 0, 10, "category")).thenReturn(expected);
 
         //Then
         assertThrows(ValidationModelException.class, () -> {
-            dishUseCase.getAllDishes(0);
+            dishUseCase.getPaginatedDishesByCategory(1L, 0, 10, "category");
         });
     }
 

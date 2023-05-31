@@ -63,6 +63,7 @@ public class DishRestController {
                 .body(Collections.singletonMap(RESPONSE_MESSAGE_KEY, DISH_CREATED_MESSAGE));
     }
 
+    @Secured({"CUSTOMER"})
     @Operation(summary = "Get all the dishes",
             responses = {
                     @ApiResponse(responseCode = "200", description = "All dishes returned",
@@ -71,10 +72,14 @@ public class DishRestController {
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
-    @GetMapping("/all")
+    @GetMapping("/all/{id}")
     public ResponseEntity<List<DishResponseDto>> getAllDishes(
-            @Parameter(description = "Number of the page to list dishes") @RequestParam int page) {
-        return ResponseEntity.ok(dishHandler.getAllDishes(page));
+            @Parameter(description = "Id of the restaurant to which you want to consult the dishes")
+            @PathVariable Long id,
+            @Parameter(description = "Page to get the limited dish list") @RequestParam int page,
+            @Parameter(description = "Size to get the limited dish list") @RequestParam int size,
+            @Parameter(description = "Category name to filter dishes") @RequestParam String category) {
+        return ResponseEntity.ok(dishHandler.getPaginatedDishesByCategory(id, page, size, category));
     }
 
     @Operation(summary = "Get a dish by id",
