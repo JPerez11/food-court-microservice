@@ -88,14 +88,16 @@ class DishRestControllerTest {
     }
 
     @Test
-    void shouldGetAllDishes() throws Exception {
+    void getPaginatedDishesByCategory() throws Exception {
         //Given
         List<DishResponseDto> expected = DishControllerTestDataFactory.getDishesList();
         String token = DishControllerTestDataFactory.getToken("OWNER", "test@example.com");
 
         //When
-        mockMvc.perform(get("/dish/all")
+        mockMvc.perform(get("/dish/all/1")
                         .param("page", String.valueOf(0))
+                        .param("size", String.valueOf(10))
+                        .param("category", "category")
                         .header("Authorization", "Bearer " + token)
                         .content(asJsonString(expected))
                         .contentType(MediaType.APPLICATION_JSON)

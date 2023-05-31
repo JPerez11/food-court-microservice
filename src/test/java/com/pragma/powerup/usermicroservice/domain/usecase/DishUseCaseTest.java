@@ -78,7 +78,7 @@ class DishUseCaseTest {
     }
 
     @Test
-    void shouldGetAllDishes() {
+    void getPaginatedDishesByCategory() {
         //Given
         List<DishModel> expected = DishTestDataFactory.getDishesList();
 
