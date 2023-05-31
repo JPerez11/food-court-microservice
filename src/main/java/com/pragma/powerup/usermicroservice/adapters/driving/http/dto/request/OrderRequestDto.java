@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,7 +13,7 @@ public class OrderRequestDto {
 
     private Long idCustomer;
     private Long idEmployee;
-    private LocalDate date;
+    private LocalDateTime date;
     private String status = "PENDING";
     private Long idRestaurant;
 

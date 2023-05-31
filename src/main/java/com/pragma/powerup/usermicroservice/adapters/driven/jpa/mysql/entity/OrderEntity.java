@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ORDERS")
@@ -31,7 +31,7 @@ public class OrderEntity {
     @Column(name = "id_employee")
     private Long idEmployee;
     @Column(name = "creation_date", nullable = false)
-    private LocalDate date;
+    private LocalDateTime date;
     @Column(nullable = false)
     private String status;
     @ManyToOne
