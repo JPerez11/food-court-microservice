@@ -49,8 +49,8 @@ public class RestaurantUseCase implements RestaurantServicePort {
     }
 
     @Override
-    public List<RestaurantModel> getAllRestaurants() {
-        List<RestaurantModel> restaurantModelList = restaurantPersistencePort.getAllRestaurants();
+    public List<RestaurantModel> getAllRestaurants(int pageNumber, int pageSize) {
+        List<RestaurantModel> restaurantModelList = restaurantPersistencePort.getAllRestaurants(pageNumber, pageSize);
         if (restaurantModelList.isEmpty()) {
             throw new NoDataFoundException();
         }

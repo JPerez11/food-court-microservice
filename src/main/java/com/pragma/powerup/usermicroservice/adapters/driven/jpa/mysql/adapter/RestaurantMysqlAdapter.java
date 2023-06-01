@@ -5,6 +5,8 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositorie
 import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
 import com.pragma.powerup.usermicroservice.domain.spi.RestaurantPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -31,8 +33,10 @@ public class RestaurantMysqlAdapter implements RestaurantPersistencePort {
     }
 
     @Override
-    public List<RestaurantModel> getAllRestaurants() {
-        return restaurantEntityMapper.toRestaurantModelList(restaurantRepository.findAll());
+    public List<RestaurantModel> getAllRestaurants(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return restaurantEntityMapper.toRestaurantModelList(
+                restaurantRepository.findAllByOrderByName(pageable).getContent());
     }
 
     @Override
