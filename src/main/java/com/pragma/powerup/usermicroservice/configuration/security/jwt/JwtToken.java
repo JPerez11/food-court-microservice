@@ -24,7 +24,7 @@ import java.util.Date;
  */
 public class JwtToken {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtToken.class);
-    private static final String ROLES = "roles";
+    private static final String ROLE = "role";
     private static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
     private static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 3600L;
 
@@ -48,7 +48,7 @@ public class JwtToken {
         //Set subject email in JWT
         Claims claims = Jwts.claims().setSubject(email);
         //Set the role in JWT
-        claims.put(ROLES, role);
+        claims.put(ROLE, role);
 
         //Token generation and return
         return Jwts.builder()
@@ -74,7 +74,7 @@ public class JwtToken {
             //Extract the email from the token
             String email = claims.getSubject();
             //Extract the role from the token
-            String role = (String) claims.get(ROLES);
+            String role = (String) claims.get(ROLE);
             //Create an Authorities with the role
             Collection<? extends GrantedAuthority> authorities =
                     Collections.singletonList(new SimpleGrantedAuthority(role));

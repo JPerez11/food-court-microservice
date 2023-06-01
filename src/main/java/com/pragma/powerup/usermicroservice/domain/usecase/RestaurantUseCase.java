@@ -1,5 +1,8 @@
 package com.pragma.powerup.usermicroservice.domain.usecase;
 
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantAlreadyExistsException;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantServicePort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
@@ -23,6 +26,12 @@ public class RestaurantUseCase implements RestaurantServicePort {
 
     @Override
     public void createRestaurant(RestaurantModel restaurantModel) {
+        if (restaurantModel == null) {
+            throw new NullPointerException();
+        }
+        if (restaurantPersistencePort.existsRestaurantByTaxIdNumber(restaurantModel.getTaxIdNumber())) {
+            throw new RestaurantAlreadyExistsException();
+        }
         UserModel userModel = userFeignClientPort.getUserById(restaurantModel.getIdOwner());
         UserValidation.validateOwner(userModel.getRoleModel());
         RestaurantValidation.restaurantValidate(restaurantModel);
@@ -32,6 +41,9 @@ public class RestaurantUseCase implements RestaurantServicePort {
     @Override
     public RestaurantModel getRestaurantById(Long id) {
         RestaurantModel restaurantModel = restaurantPersistencePort.getRestaurantById(id);
+        if (restaurantModel == null) {
+            throw new RestaurantNotFoundException();
+        }
         RestaurantValidation.getRestaurantValidate(restaurantModel);
         return restaurantModel;
     }
@@ -39,6 +51,9 @@ public class RestaurantUseCase implements RestaurantServicePort {
     @Override
     public List<RestaurantModel> getAllRestaurants() {
         List<RestaurantModel> restaurantModelList = restaurantPersistencePort.getAllRestaurants();
+        if (restaurantModelList.isEmpty()) {
+            throw new NoDataFoundException();
+        }
         RestaurantValidation.getAllRestaurantsValidate(restaurantModelList);
         return restaurantModelList;
     }
