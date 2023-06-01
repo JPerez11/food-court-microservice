@@ -3,6 +3,7 @@ package com.pragma.powerup.usermicroservice.adapters.driving.http.controller;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.RestaurantHandler;
+import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class RestaurantRestController {
 
     private final RestaurantHandler restaurantHandler;
 
-    @Secured({"ADMIN"})
+    @Secured({Constants.ADMIN_ROLE_NAME})
     @Operation(summary = "Add a new restaurant",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Restaurant created",
@@ -47,28 +47,27 @@ public class RestaurantRestController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/")
-    public ResponseEntity<Map<String, String>> createRestaurant(
-            @Valid @RequestBody RestaurantRequestDto restaurantRequest) {
+    public ResponseEntity<Map<String, String>> createRestaurant(@Valid @RequestBody RestaurantRequestDto restaurantRequest) {
         restaurantHandler.createRestaurant(restaurantRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(RESPONSE_MESSAGE_KEY, RESTAURANT_CREATED_MESSAGE));
     }
 
-    @Secured({"CUSTOMER"})
+    @Secured({Constants.ADMIN_ROLE_NAME, Constants.OWNER_ROLE_NAME})
     @Operation(summary = "Get all the restaurants",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "All restaurants returned ",
+                    @ApiResponse(responseCode = "200", description = "All restaurants returned",
                             content = @Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = RestaurantResponseDto.class)))),
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("/all")
-    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants(
-            @Valid @RequestParam int pageNumber, @RequestParam int pageSize) {
-        return ResponseEntity.ok(restaurantHandler.getAllRestaurants(pageNumber, pageSize));
+    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants() {
+        return ResponseEntity.ok(restaurantHandler.getAllRestaurants());
     }
 
+    @Secured({Constants.ADMIN_ROLE_NAME, Constants.OWNER_ROLE_NAME})
     @Operation(summary = "Get a restaurant by id",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Restaurant returned",
