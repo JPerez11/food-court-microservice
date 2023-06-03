@@ -62,14 +62,6 @@ public class DishValidation {
         return data.trim().isEmpty();
     }
 
-    public static void getDishValidation(DishModel dishModel) {
-        exceptionMap = new HashMap<>();
-        exceptionMap.put("message", "Record with provided id not found");
-        if (dishModel == null) {
-            throw new ValidationModelException(exceptionMap);
-        }
-    }
-
     public static void getAllDishesValidate(List<DishModel> dishModelList) {
         exceptionMap = new HashMap<>();
         exceptionMap.put("message", "No data found in the database");

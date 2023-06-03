@@ -1,6 +1,7 @@
 package com.pragma.powerup.usermicroservice.domain.usecase;
 
 import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
@@ -136,9 +137,13 @@ class DishUseCaseTest {
 
         //Then
         Mockito.verify(dishPersistencePort).getDishById(Mockito.anyLong());
-        assertThrows(ValidationModelException.class, () -> {
-            dishUseCase.getDishById(50L);
-        });
+    }
+
+    @Test
+    void shouldThrowDishNotFoundException() {
+        //Then
+        assertThrows(DishNotFoundException.class,
+                () -> dishUseCase.getDishById(50L));
     }
 
     @Test
@@ -183,6 +188,8 @@ class DishUseCaseTest {
         DishModel expect = DishTestDataFactory.getDishFromSetters();
 
         //When
+        Mockito.when(dishPersistencePort.getDishById(1L)).thenReturn(expect);
+        Mockito.when(dishPersistencePort.getAuthenticatedUserId()).thenReturn(2L);
         Mockito.when(dishPersistencePort.updateDish(1L, expect)).thenReturn(expect);
         dishUseCase.updateDish(1L, expect);
 
@@ -190,6 +197,37 @@ class DishUseCaseTest {
         Mockito.verify(dishPersistencePort).updateDish(1L, expect);
 
     }
+
+    @Test
+    void shouldThrowNullPointerExceptionInUpdateDish() {
+        //Then
+        assertThrows(NullPointerException.class,
+                () -> dishUseCase.updateDish(1L, null));
+    }
+
+    @Test
+    void shouldThrowDishNotFoundExceptionInUpdateDish() {
+        //Given
+        DishModel nullDish = new DishModel();
+
+        //Then
+        assertThrows(DishNotFoundException.class,
+                () -> dishUseCase.updateDish(1L, nullDish));
+    }
+
+    @Test
+    void shouldThrowOwnerNotAuthorizedForUpdateExceptionInUpdateDish() {
+        //Given
+        DishModel expect = DishTestDataFactory.getDishFromSetters();
+
+        //When
+        Mockito.when(dishPersistencePort.getDishById(1L)).thenReturn(expect);
+
+        //Then
+        assertThrows(OwnerNotAuthorizedForUpdateException.class,
+                () -> dishUseCase.updateDish(1L, expect));
+    }
+
     @Test
     void shouldUpdateDishStatus() {
         //Given

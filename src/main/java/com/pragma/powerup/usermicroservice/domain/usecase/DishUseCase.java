@@ -2,6 +2,7 @@ package com.pragma.powerup.usermicroservice.domain.usecase;
 
 import com.pragma.powerup.usermicroservice.domain.api.DishServicePort;
 import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.model.CategoryModel;
@@ -49,7 +50,9 @@ public class DishUseCase implements DishServicePort {
     @Override
     public DishModel getDishById(Long id) {
         DishModel dishModel = dishPersistencePort.getDishById(id);
-        DishValidation.getDishValidation(dishModel);
+        if (dishModel == null) {
+            throw new DishNotFoundException();
+        }
         return dishModel;
     }
 
@@ -62,7 +65,20 @@ public class DishUseCase implements DishServicePort {
 
     @Override
     public DishModel updateDish(Long id, DishModel dishModel) {
-        return dishPersistencePort.updateDish(id, dishModel);
+        if (dishModel == null) {
+            throw new NullPointerException();
+        }
+        DishModel dishDb = dishPersistencePort.getDishById(id);
+        if (dishDb == null) {
+            throw new  DishNotFoundException();
+        }
+        Long authenticatedUserId = dishPersistencePort.getAuthenticatedUserId();
+        if (!Objects.equals(dishDb.getRestaurantModel().getIdOwner(), authenticatedUserId)) {
+            throw new OwnerNotAuthorizedForUpdateException();
+        }
+        dishDb.setDescription( dishModel.getDescription() );
+        dishDb.setPrice( dishModel.getPrice() );
+        return dishPersistencePort.updateDish(id, dishDb);
     }
 
     @Override

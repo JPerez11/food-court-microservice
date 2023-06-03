@@ -47,7 +47,7 @@ public class DishMysqlAdapter implements DishPersistencePort {
     public DishModel getDishById(Long id) {
         return dishEntityMapper.toDishModel(
                 dishRepository.findById(id)
-                        .orElseThrow(DishNotFoundException::new)
+                        .orElse(null)
         );
     }
 
@@ -70,13 +70,9 @@ public class DishMysqlAdapter implements DishPersistencePort {
     }
 
     @Override
-    public DishModel updateDish(Long id, DishModel dishModel) {
-        DishEntity dishDb = getDishToUpdate(id, dishModel);
-        dishDb.setDescription( dishModel.getDescription() );
-        dishDb.setPrice( dishModel.getPrice() );
-
+    public DishModel updateDish(Long id, DishModel dishDb) {
         return dishEntityMapper.toDishModel(
-                dishRepository.save(dishDb));
+                dishRepository.save(dishEntityMapper.toDishEntity(dishDb)));
     }
 
     @Override
@@ -104,6 +100,7 @@ public class DishMysqlAdapter implements DishPersistencePort {
         return dishDb;
     }
 
+    // Method to validate domain
     @Override
     public RestaurantModel getRestaurantById(Long id) {
         return restaurantEntityMapper.toRestaurantModel(
