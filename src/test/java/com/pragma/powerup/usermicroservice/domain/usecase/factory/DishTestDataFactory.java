@@ -52,7 +52,7 @@ public class DishTestDataFactory {
         );
     }
 
-    private static CategoryModel getCategoryFromSetters() {
+    public static CategoryModel getCategoryFromSetters() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.setId(1L);
         categoryModel.setName("category1");

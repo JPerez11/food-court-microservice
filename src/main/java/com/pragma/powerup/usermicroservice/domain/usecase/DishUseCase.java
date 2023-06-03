@@ -26,6 +26,7 @@ public class DishUseCase implements DishServicePort {
         if (dishModel == null) {
             throw new NullPointerException();
         }
+        DishValidation.dishValidate(dishModel);
         RestaurantModel restaurant = dishPersistencePort.getRestaurantById(
                 dishModel.getRestaurantModel().getId());
         if (restaurant == null) {
@@ -42,7 +43,6 @@ public class DishUseCase implements DishServicePort {
             throw new CategoryNotFoundException();
         }
         dishModel.setCategoryModel(category);
-        DishValidation.dishValidate(dishModel);
         dishPersistencePort.createDish(dishModel);
     }
 

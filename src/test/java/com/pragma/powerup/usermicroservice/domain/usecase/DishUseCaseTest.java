@@ -1,9 +1,15 @@
 package com.pragma.powerup.usermicroservice.domain.usecase;
 
+import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
+import com.pragma.powerup.usermicroservice.domain.model.CategoryModel;
 import com.pragma.powerup.usermicroservice.domain.model.DishModel;
+import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
 import com.pragma.powerup.usermicroservice.domain.spi.DishPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.usecase.factory.DishTestDataFactory;
+import com.pragma.powerup.usermicroservice.domain.usecase.factory.RestaurantTestDataFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,8 +35,18 @@ class DishUseCaseTest {
     void shouldCreateDish() {
         //Given
         DishModel expect = DishTestDataFactory.getDishFromSetters();
+        RestaurantModel restaurant = RestaurantTestDataFactory.getRestaurantFromSetters();
+        CategoryModel category = DishTestDataFactory.getCategoryFromSetters();
 
         //When
+        Mockito.when(dishPersistencePort.getRestaurantById(1L))
+                .thenReturn(restaurant);
+        expect.setRestaurantModel(restaurant);
+        Mockito.when(dishPersistencePort.getAuthenticatedUserId())
+                .thenReturn(2L);
+        Mockito.when(dishPersistencePort.getCategoryById(1L))
+                .thenReturn(category);
+        expect.setCategoryModel(category);
         Mockito.doNothing().when(dishPersistencePort).createDish(expect);
         dishUseCase.createDish(expect);
 
@@ -45,9 +61,8 @@ class DishUseCaseTest {
 
 
         //Then
-        assertThrows(NullPointerException.class, () -> {
-            dishUseCase.createDish(nullDish);
-        });
+        assertThrows(NullPointerException.class,
+                () -> dishUseCase.createDish(nullDish));
     }
 
     @Test
@@ -56,9 +71,58 @@ class DishUseCaseTest {
         DishModel expect = DishTestDataFactory.getEmptyDish();
 
         //Then
-        assertThrows(ValidationModelException.class, () -> {
-            dishUseCase.createDish(expect);
-        });
+        assertThrows(ValidationModelException.class, () ->
+            dishUseCase.createDish(expect));
+    }
+
+    @Test
+    void shouldThrowRestaurantNotFoundException() {
+        // Given
+        DishModel dishModel = DishTestDataFactory.getDishFromSetters();
+
+        // When
+        Mockito.when(dishPersistencePort.getRestaurantById(1L))
+                .thenReturn(null);
+
+        // Then throw
+        assertThrows(RestaurantNotFoundException.class,
+                () -> dishUseCase.createDish(dishModel));
+    }
+
+    @Test
+    void shouldThrowOwnerNotAuthorizedForUpdateException() {
+        // Given
+        DishModel dishModel = DishTestDataFactory.getDishFromSetters();
+        RestaurantModel restaurant = RestaurantTestDataFactory.getRestaurantFromSetters();
+
+        // When
+        Mockito.when(dishPersistencePort.getRestaurantById(1L))
+                .thenReturn(restaurant);
+        dishModel.setRestaurantModel(restaurant);
+
+        // Then throw
+        assertThrows(OwnerNotAuthorizedForUpdateException.class,
+                () -> dishUseCase.createDish(dishModel));
+    }
+
+    @Test
+    void shouldThrowCategoryNotFoundException() {
+        // Given
+        DishModel dishModel = DishTestDataFactory.getDishFromSetters();
+        RestaurantModel restaurant = RestaurantTestDataFactory.getRestaurantFromSetters();
+
+        // When
+        Mockito.when(dishPersistencePort.getRestaurantById(1L))
+                .thenReturn(restaurant);
+        dishModel.setRestaurantModel(restaurant);
+        Mockito.when(dishPersistencePort.getAuthenticatedUserId())
+                .thenReturn(2L);
+        Mockito.when(dishPersistencePort.getCategoryById(1L))
+                .thenReturn(null);
+
+        // Then throw
+        assertThrows(CategoryNotFoundException.class,
+                () -> dishUseCase.createDish(dishModel));
     }
 
     @Test
