@@ -3,9 +3,7 @@ package com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.CategoryEntityMapper;
 import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
-import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
-import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.DishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.RestaurantEntityMapper;
@@ -24,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 @Transactional
 @RequiredArgsConstructor
@@ -39,8 +36,7 @@ public class DishMysqlAdapter implements DishPersistencePort {
 
     @Override
     public void createDish(DishModel dishModel) {
-        DishEntity dishEntity = dishEntityMapper.toDishEntity(dishModel);
-        dishRepository.save(dishEntity);
+        dishRepository.save(dishEntityMapper.toDishEntity(dishModel));
     }
 
     @Override
@@ -73,31 +69,6 @@ public class DishMysqlAdapter implements DishPersistencePort {
     public DishModel updateDish(Long id, DishModel dishDb) {
         return dishEntityMapper.toDishModel(
                 dishRepository.save(dishEntityMapper.toDishEntity(dishDb)));
-    }
-
-    @Override
-    public DishModel updateDishStatus(Long id, DishModel dishModel) {
-        DishEntity dishDb = getDishToUpdate(id, dishModel);
-
-        dishDb.setActive( dishModel.isActive() );
-
-        return dishEntityMapper.toDishModel(
-                dishRepository.save(dishDb)
-        );
-    }
-
-    /* Method to obtain the dish and validate owner */
-    private DishEntity getDishToUpdate(Long id, DishModel dishModel) {
-        DishEntity dishDb = dishRepository.findById(id).orElseThrow(DishNotFoundException::new);
-        Long authenticatedUserId = ExtractAuthorization.getAuthenticatedUserId();
-
-        if (!Objects.equals(dishDb.getRestaurantEntity().getIdOwner(), authenticatedUserId)) {
-            throw new OwnerNotAuthorizedForUpdateException();
-        }
-        if (dishModel == null) {
-            throw new NullPointerException();
-        }
-        return dishDb;
     }
 
     // Method to validate domain

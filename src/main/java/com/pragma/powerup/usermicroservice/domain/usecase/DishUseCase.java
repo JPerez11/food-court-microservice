@@ -65,17 +65,7 @@ public class DishUseCase implements DishServicePort {
 
     @Override
     public DishModel updateDish(Long id, DishModel dishModel) {
-        if (dishModel == null) {
-            throw new NullPointerException();
-        }
-        DishModel dishDb = dishPersistencePort.getDishById(id);
-        if (dishDb == null) {
-            throw new  DishNotFoundException();
-        }
-        Long authenticatedUserId = dishPersistencePort.getAuthenticatedUserId();
-        if (!Objects.equals(dishDb.getRestaurantModel().getIdOwner(), authenticatedUserId)) {
-            throw new OwnerNotAuthorizedForUpdateException();
-        }
+        DishModel dishDb = dishToUpdate(id, dishModel);
         dishDb.setDescription( dishModel.getDescription() );
         dishDb.setPrice( dishModel.getPrice() );
         return dishPersistencePort.updateDish(id, dishDb);
@@ -83,6 +73,23 @@ public class DishUseCase implements DishServicePort {
 
     @Override
     public DishModel updateDishStatus(Long id, DishModel dishModel) {
-        return dishPersistencePort.updateDishStatus(id, dishModel);
+        DishModel dishDb = dishToUpdate(id, dishModel);
+        dishDb.setActive( dishModel.isActive() );
+        return dishPersistencePort.updateDish(id, dishDb);
+    }
+
+    private DishModel dishToUpdate(Long id, DishModel dishModel) {
+        if (dishModel == null) {
+            throw new NullPointerException();
+        }
+        DishModel dishDb = dishPersistencePort.getDishById(id);
+        if (dishDb == null) {
+            throw new DishNotFoundException();
+        }
+        Long authenticatedUserId = dishPersistencePort.getAuthenticatedUserId();
+        if (!Objects.equals(dishDb.getRestaurantModel().getIdOwner(), authenticatedUserId)) {
+            throw new OwnerNotAuthorizedForUpdateException();
+        }
+        return dishDb;
     }
 }

@@ -1,5 +1,7 @@
 package com.pragma.powerup.usermicroservice.domain.usecase;
 
+import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
@@ -79,9 +81,8 @@ class RestaurantUseCaseTest {
         RestaurantModel withoutOwner = RestaurantTestDataFactory.getRestaurantWithoutOwner();
 
         //Then
-        assertThrows(NullPointerException.class, () -> {
-            restaurantUseCase.createRestaurant(withoutOwner);
-        });
+        assertThrows(NullPointerException.class,
+                () -> restaurantUseCase.createRestaurant(withoutOwner));
     }
 
     @Test
@@ -95,9 +96,8 @@ class RestaurantUseCaseTest {
                 .thenReturn(userModel);
 
         //Then
-        assertThrows(ValidationModelException.class, () -> {
-            restaurantUseCase.createRestaurant(expectedEmptyRestaurant);
-        });
+        assertThrows(ValidationModelException.class,
+                () -> restaurantUseCase.createRestaurant(expectedEmptyRestaurant));
 
     }
 
@@ -111,9 +111,8 @@ class RestaurantUseCaseTest {
         Mockito.when(userFeignClientPort.getUserById(differentIdOwner.getIdOwner())).thenReturn(userAdmin);
 
         //Then
-        assertThrows(RestaurantOwnerIdException.class, () -> {
-            restaurantUseCase.createRestaurant(differentIdOwner);
-        });
+        assertThrows(RestaurantOwnerIdException.class,
+                () -> restaurantUseCase.createRestaurant(differentIdOwner));
     }
 
     @Test
@@ -127,9 +126,8 @@ class RestaurantUseCaseTest {
 
         //Then
         verify(restaurantPersistencePort).getRestaurantById(1L);
-        assertThrows(ValidationModelException.class, () -> {
-            restaurantUseCase.getRestaurantById(10L);
-        });
+        assertThrows(RestaurantNotFoundException.class,
+                () -> restaurantUseCase.getRestaurantById(10L));
 
     }
 
@@ -165,9 +163,8 @@ class RestaurantUseCaseTest {
         Mockito.when(restaurantPersistencePort.getAllRestaurants(0, 2)).thenReturn(expectedEmptyList);
 
         //Then
-        assertThrows(ValidationModelException.class, () -> {
-            restaurantUseCase.getAllRestaurants(0, 2);
-        });
+        assertThrows(NoDataFoundException.class,
+                () -> restaurantUseCase.getAllRestaurants(0, 2));
     }
 
 

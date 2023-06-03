@@ -174,12 +174,12 @@ class DishUseCaseTest {
         List<DishModel> expected = Collections.emptyList();
 
         //When
-        Mockito.when(dishPersistencePort.getPaginatedDishesByCategory(1L, 0, 10, "category")).thenReturn(expected);
+        Mockito.when(dishPersistencePort.getPaginatedDishesByCategory(1L, 0, 10, "category"))
+                .thenReturn(expected);
 
         //Then
-        assertThrows(ValidationModelException.class, () -> {
-            dishUseCase.getPaginatedDishesByCategory(1L, 0, 10, "category");
-        });
+        assertThrows(ValidationModelException.class,
+                () -> dishUseCase.getPaginatedDishesByCategory(1L, 0, 10, "category"));
     }
 
     @Test
@@ -234,11 +234,13 @@ class DishUseCaseTest {
         DishModel expect = DishTestDataFactory.getDishFromSetters();
 
         //When
-        Mockito.when(dishPersistencePort.updateDishStatus(1L, expect)).thenReturn(expect);
+        Mockito.when(dishPersistencePort.getDishById(1L)).thenReturn(expect);
+        Mockito.when(dishPersistencePort.getAuthenticatedUserId()).thenReturn(2L);
+        Mockito.when(dishPersistencePort.updateDish(1L, expect)).thenReturn(expect);
         dishUseCase.updateDishStatus(1L, expect);
 
         //Then
-        Mockito.verify(dishPersistencePort).updateDishStatus(1L, expect);
+        Mockito.verify(dishPersistencePort).updateDish(1L, expect);
 
     }
 

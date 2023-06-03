@@ -16,8 +16,6 @@ public interface DishPersistencePort {
 
     DishModel updateDish(Long id, DishModel dishModel);
 
-    DishModel updateDishStatus(Long id, DishModel dishModel);
-
     RestaurantModel getRestaurantById(Long id);
     Long getAuthenticatedUserId();
     CategoryModel getCategoryById(Long id);
