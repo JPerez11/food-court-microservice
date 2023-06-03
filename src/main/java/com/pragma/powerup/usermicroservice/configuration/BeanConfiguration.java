@@ -5,6 +5,7 @@ import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.impl.Use
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.UserResponseMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.DishMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.RestaurantMysqlAdapter;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.CategoryEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.DishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.RestaurantEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.CategoryRepository;
@@ -31,6 +32,7 @@ public class BeanConfiguration {
     private final DishEntityMapper dishEntityMapper;
     private final UserFeignClientAdapter userFeignClientAdapter;
     private final UserResponseMapper userResponseMapper;
+    private final CategoryEntityMapper categoryEntityMapper;
 
     @Bean
     public RestaurantServicePort restaurantServicePort() {
@@ -46,7 +48,8 @@ public class BeanConfiguration {
     }
     @Bean
     public DishPersistencePort dishPersistencePort() {
-        return new DishMysqlAdapter(dishRepository, categoryRepository, restaurantRepository, dishEntityMapper);
+        return new DishMysqlAdapter(dishRepository, categoryRepository, restaurantRepository, dishEntityMapper,
+                restaurantEntityMapper, categoryEntityMapper);
     }
     @Bean
     public UserFeignClientPort feignClientPort() {

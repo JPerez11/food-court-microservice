@@ -3,7 +3,7 @@ package com.pragma.powerup.usermicroservice.adapters.driven.feign.client.impl;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.UserFeignClientAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.dto.UserResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.UserResponseMapper;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.model.UserModel;
 import lombok.RequiredArgsConstructor;
