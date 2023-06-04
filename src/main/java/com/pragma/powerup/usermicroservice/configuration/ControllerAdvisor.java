@@ -4,6 +4,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundExc
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
@@ -30,6 +31,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.NO_DATA_FOUND_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.OWNER_NOT_AUTHORIZED_FOR_UPDATE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESPONSE_ERROR_MESSAGE_KEY;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_ALREADY_EXISTS_MESSAGE;
@@ -119,6 +121,12 @@ public class ControllerAdvisor {
             CategoryNotFoundException categoryNotFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CATEGORY_NOT_FOUND_MESSAGE));
+    }
+    @ExceptionHandler(OrderAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleOrderAlreadyExistsException(
+            OrderAlreadyExistsException orderAlreadyExistsException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_ALREADY_EXISTS_MESSAGE));
     }
     @ExceptionHandler(ValidationModelException.class)
     public ResponseEntity<Map<String, Map<String, String>>> handleValidationModelException(

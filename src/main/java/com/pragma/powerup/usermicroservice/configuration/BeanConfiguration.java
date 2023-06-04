@@ -4,18 +4,25 @@ import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.UserFeig
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.impl.UserFeignClientAdapterImpl;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.UserResponseMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.DishMysqlAdapter;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.OrderMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.RestaurantMysqlAdapter;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.CategoryEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.DishEntityMapper;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.OrderEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.RestaurantEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.CategoryRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.DishRepository;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.OrderRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantRepository;
 import com.pragma.powerup.usermicroservice.domain.api.DishServicePort;
+import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantServicePort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.spi.DishPersistencePort;
+import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.spi.RestaurantPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.usecase.DishUseCase;
+import com.pragma.powerup.usermicroservice.domain.usecase.OrderUseCase;
 import com.pragma.powerup.usermicroservice.domain.usecase.RestaurantUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +38,9 @@ public class BeanConfiguration {
     private final DishEntityMapper dishEntityMapper;
     private final UserFeignClientAdapter userFeignClientAdapter;
     private final UserResponseMapper userResponseMapper;
+    private final CategoryEntityMapper categoryEntityMapper;
+    private final OrderRepository orderRepository;
+    private final OrderEntityMapper orderEntityMapper;
 
     @Bean
     public RestaurantServicePort restaurantServicePort() {
@@ -46,7 +56,16 @@ public class BeanConfiguration {
     }
     @Bean
     public DishPersistencePort dishPersistencePort() {
-        return new DishMysqlAdapter(dishRepository, categoryRepository, restaurantRepository, dishEntityMapper);
+        return new DishMysqlAdapter(dishRepository, categoryRepository, restaurantRepository, dishEntityMapper,
+                restaurantEntityMapper, categoryEntityMapper);
+    }
+    @Bean
+    public OrderPersistencePort orderPersistencePort() {
+        return new OrderMysqlAdapter(orderRepository, orderEntityMapper);
+    }
+    @Bean
+    public OrderServicePort orderServicePort() {
+        return new OrderUseCase(orderPersistencePort());
     }
     @Bean
     public UserFeignClientPort feignClientPort() {

@@ -1,6 +1,8 @@
 package com.pragma.powerup.usermicroservice.domain.usecase;
 
+import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
 
@@ -16,6 +18,13 @@ public class OrderUseCase implements OrderServicePort {
 
     @Override
     public void createOrder(OrderModel orderModel) {
+        if (orderModel == null) {
+            throw new NullPointerException();
+        }
+        if (orderPersistencePort.existsOrderByCustomer(orderModel.getIdCustomer())) {
+            throw new OrderAlreadyExistsException();
+        }
+        orderModel.setStatus(Constants.PENDING_STATUS);
         orderPersistencePort.createOrder(orderModel);
     }
 

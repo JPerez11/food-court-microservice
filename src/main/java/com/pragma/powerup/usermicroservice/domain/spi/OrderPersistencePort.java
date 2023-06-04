@@ -8,5 +8,5 @@ public interface OrderPersistencePort {
 
     void createOrder(OrderModel orderModel);
     List<OrderModel> listOrder(int page, int size, Long id, String status);
-
+    boolean existsOrderByCustomer(Long id);
 }
