@@ -76,8 +76,8 @@ public class DishRestController {
     public ResponseEntity<List<DishResponseDto>> getAllDishes(
             @Parameter(description = "Id of the restaurant to which you want to consult the dishes")
             @PathVariable Long id,
-            @Parameter(description = "Page to get the limited dish list") @RequestParam int page,
-            @Parameter(description = "Size to get the limited dish list") @RequestParam int size,
+            @Parameter(description = "Page number to limit the list") @RequestParam int page,
+            @Parameter(description = "Size of elements per page") @RequestParam int size,
             @Parameter(description = "Category name to filter dishes") @RequestParam String category) {
         return ResponseEntity.ok(dishHandler.getPaginatedDishesByCategory(id, page, size, category));
     }

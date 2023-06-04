@@ -14,7 +14,7 @@ import lombok.Setter;
 public class RestaurantRequestDto {
 
     @NotBlank(message = "The name must not be empty")
-    @Pattern(regexp = "^(?=.*[a-zA-Z])[a-zA-Z\\d]*$",
+    @Pattern(regexp = "^(?=.*[a-zA-Z])[a-zA-Z\\d\\s]*$",
             message = "The name of the restaurant cannot be just numbers")
     private String name;
     @NotBlank(message = "The NIT must not be empty")

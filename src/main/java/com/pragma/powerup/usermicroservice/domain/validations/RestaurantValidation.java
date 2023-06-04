@@ -4,7 +4,6 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelExce
 import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -38,6 +37,8 @@ public class RestaurantValidation {
         validateField(restaurantModel.getPhoneNumber(), "phone", EMPTY_FIELD,
                 RestaurantValidation::isStringEmpty);
         validateField(restaurantModel.getLogoUrl(), "birthdate", EMPTY_FIELD,
+                RestaurantValidation::isStringEmpty);
+        validateField(String.valueOf(restaurantModel.getIdOwner()), "Owner ID", EMPTY_FIELD,
                 RestaurantValidation::isStringEmpty);
         //Validate data if badly formatted
         validateField(restaurantModel.getTaxIdNumber(), "nit format", INVALID_FORMAT,
@@ -89,21 +90,6 @@ public class RestaurantValidation {
                 .compile(PHONE_NUMBER_REGEX);
         matcher = pattern.matcher(phone);
         return !matcher.find();
-    }
-
-    public static void getRestaurantValidate(RestaurantModel restaurantModel) {
-        exceptionMap = new HashMap<>();
-        exceptionMap.put("message", "Record with provided id not found");
-        if (restaurantModel == null) {
-            throw new ValidationModelException(exceptionMap);
-        }
-    }
-    public static void getAllRestaurantsValidate(List<RestaurantModel> restaurantModelList) {
-        exceptionMap = new HashMap<>();
-        exceptionMap.put("message", "No data found in the database");
-        if (restaurantModelList.isEmpty()) {
-            throw new ValidationModelException(exceptionMap);
-        }
     }
 
 }

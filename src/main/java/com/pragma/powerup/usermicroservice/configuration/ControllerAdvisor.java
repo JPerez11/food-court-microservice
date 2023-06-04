@@ -1,17 +1,15 @@
 package com.pragma.powerup.usermicroservice.configuration;
 
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.CategoryNotFoundException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.OrderAlreadyExistsException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotAuthorizedForUpdateException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantAlreadyExistsException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.DishAlreadyExistsException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyExistsException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RoleNotAllowedForCreationException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RoleNotFoundException;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.UserNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RoleNotAllowedForCreationException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
@@ -32,14 +30,12 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.NO_DATA_FOUND_MESSAGE;
-import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.OWNER_NOT_AUTHORIZED_FOR_UPDATE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESPONSE_ERROR_MESSAGE_KEY;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_OWNER_ID_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ROLE_NOT_ALLOWED_MESSAGE;
-import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ROLE_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.USER_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.WRONG_CREDENTIALS_MESSAGE;
 
@@ -75,12 +71,6 @@ public class ControllerAdvisor {
             RoleNotAllowedForCreationException roleNotAllowedForCreationException) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ROLE_NOT_ALLOWED_MESSAGE));
-    }
-    @ExceptionHandler(RoleNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleRoleNotFoundException(
-            RoleNotFoundException roleNotFoundException) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ROLE_NOT_FOUND_MESSAGE));
     }
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUserNotFoundException(
@@ -140,11 +130,5 @@ public class ControllerAdvisor {
     public ResponseEntity<String> handleFeignException(FeignException feignException) {
         return ResponseEntity.status(feignException.status())
                 .body(feignException.contentUTF8());
-    }
-    @ExceptionHandler(OrderAlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleOrderAlreadyExistsException(
-            OrderAlreadyExistsException exception) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_ALREADY_EXISTS_MESSAGE));
     }
 }

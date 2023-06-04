@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.controller.factory.DishControllerTestDataFactory;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.DishStatusUpdateDto;

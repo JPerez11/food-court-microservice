@@ -19,15 +19,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
-import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ACCESS_TOKEN_SECRET;
-import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
-
 /**
  * Class to create the token and extract its data.
  */
 public class JwtToken {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtToken.class);
     private static final String ROLE = "role";
+    private static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
+    private static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 3600L;
 
     private JwtToken () {}
 
@@ -96,15 +95,15 @@ public class JwtToken {
             Jwts.parserBuilder().setSigningKey(ACCESS_TOKEN_SECRET.getBytes()).build().parseClaimsJws(token);
             return true;
         } catch (MalformedJwtException e) {
-            LOGGER.error("Malformed token");
+            LOGGER.error("token mal formado");
         } catch (UnsupportedJwtException e) {
-            LOGGER.error("Unsupported token");
+            LOGGER.error("token no soportado");
         } catch (ExpiredJwtException e) {
-            LOGGER.error("Expired token");
+            LOGGER.error("token expirado");
         } catch (IllegalArgumentException e) {
-            LOGGER.error("Empty token");
+            LOGGER.error("token vacío");
         } catch (SignatureException e) {
-            LOGGER.error("Signature failure");
+            LOGGER.error("fail en la firma");
         }
         return false;
     }

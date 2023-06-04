@@ -9,5 +9,8 @@ public interface RestaurantPersistencePort {
     void createRestaurant(RestaurantModel restaurantModel);
     RestaurantModel getRestaurantById(Long id);
     List<RestaurantModel> getAllRestaurants(int pageNumber, int pageSize);
+    // Methods to catch truth value
+    boolean existsRestaurantByTaxIdNumber(String taxIdNumber);
+    String getAuthenticatedRole();
 
 }

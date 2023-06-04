@@ -7,6 +7,7 @@ public class Constants {
         throw new IllegalStateException("Utility class");
     }
 
+    public static final String ADMIN_ROLE_NAME = "ADMIN";
     public static final String OWNER_ROLE_NAME = "OWNER";
     public static final String CUSTOMER_ROLE = "CUSTOMER";
     public static final String RESPONSE_MESSAGE_KEY = "message";

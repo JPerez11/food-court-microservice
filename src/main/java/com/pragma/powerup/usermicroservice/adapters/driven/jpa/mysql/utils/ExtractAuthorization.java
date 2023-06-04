@@ -14,6 +14,18 @@ public class ExtractAuthorization {
     private ExtractAuthorization() {}
 
     public static Long getAuthenticatedUserId() {
+        Claims claims = getClaims();
+        // Get user id from claims
+        return claims.get("id", Long.class);
+    }
+
+    public static String getAuthenticatedRole() {
+        Claims claims = getClaims();
+        // Get user id from claims
+        return claims.get("role", String.class);
+    }
+
+    private static Claims getClaims() {
         // The ServletRequest is retrieved from the RequestContextHolder
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         // The requestAttributes could throw a NullPointerException
@@ -25,13 +37,11 @@ public class ExtractAuthorization {
         // Call the getToken() method from JwtAuthorizationFilter to get the token
         String token = getToken(request);
         // Decode token and get claims
-        Claims claims = Jwts.parserBuilder()
+        return Jwts.parserBuilder()
                 .setSigningKey(ACCESS_TOKEN_SECRET.getBytes())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        // Get user id from claims
-        return claims.get("id", Long.class);
     }
 
 }
