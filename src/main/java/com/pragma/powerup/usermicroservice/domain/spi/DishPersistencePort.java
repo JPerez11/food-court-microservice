@@ -19,4 +19,6 @@ public interface DishPersistencePort {
     RestaurantModel getRestaurantById(Long id);
     Long getAuthenticatedUserId();
     CategoryModel getCategoryById(Long id);
+    boolean existsCategoryByName(String category);
+    boolean existsRestaurantById(Long id);
 }

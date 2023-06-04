@@ -2,9 +2,6 @@ package com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.CategoryEntityMapper;
-import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
-import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
-import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.DishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.RestaurantEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.CategoryRepository;
@@ -49,19 +46,10 @@ public class DishMysqlAdapter implements DishPersistencePort {
 
     @Override
     public List<DishModel> getPaginatedDishesByCategory(Long id, int page, int size, String category) {
-        if (!categoryRepository.existsByNameIgnoreCase(category)) {
-            throw new CategoryNotFoundException();
-        }
-        if (!restaurantRepository.existsById(id)) {
-            throw new RestaurantNotFoundException();
-        }
         Pageable pageable = PageRequest.of(page, size);
         Page<DishEntity> dishEntityPage =
                 dishRepository.findAllByCategoryEntityNameContainingIgnoreCaseAndRestaurantEntityId(category, id,
                         pageable);
-        if (dishEntityPage.isEmpty()) {
-            throw new NoDataFoundException();
-        }
         return dishEntityMapper.toDishModelList(dishEntityPage.getContent());
     }
 
@@ -89,5 +77,15 @@ public class DishMysqlAdapter implements DishPersistencePort {
         return categoryEntityMapper.toCategoryModel(
                 categoryRepository.findById(id).orElse(null)
         );
+    }
+
+    @Override
+    public boolean existsCategoryByName(String category) {
+        return categoryRepository.existsByNameIgnoreCase(category);
+    }
+
+    @Override
+    public boolean existsRestaurantById(Long id) {
+        return restaurantRepository.existsById(id);
     }
 }

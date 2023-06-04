@@ -39,7 +39,7 @@ public class DishUseCase implements DishServicePort {
             throw new OwnerNotAuthorizedForUpdateException();
         }
         CategoryModel category = dishPersistencePort.getCategoryById(
-                dishModel.getRestaurantModel().getId());
+                dishModel.getCategoryModel().getId());
         if (category == null) {
             throw new CategoryNotFoundException();
         }
@@ -58,6 +58,12 @@ public class DishUseCase implements DishServicePort {
 
     @Override
     public List<DishModel> getPaginatedDishesByCategory(Long id, int page, int size, String category) {
+        if (!dishPersistencePort.existsCategoryByName(category)) {
+            throw new CategoryNotFoundException();
+        }
+        if (!dishPersistencePort.existsRestaurantById(id)) {
+            throw new RestaurantNotFoundException();
+        }
         List<DishModel> dishModelList = dishPersistencePort.getPaginatedDishesByCategory(id, page, size, category);
         DishValidation.getAllDishesValidate(dishModelList);
         return dishModelList;
