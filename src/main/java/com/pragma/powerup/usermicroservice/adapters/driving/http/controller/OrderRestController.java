@@ -1,6 +1,8 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.controller;
 
+import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.OrderDishRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.OrderRequestDto;
+import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.OrderDishHandler;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.OrderHandler;
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +30,7 @@ import java.util.Map;
 public class OrderRestController {
 
     private final OrderHandler orderHandler;
+    private final OrderDishHandler orderDishHandler;
 
 
     @Secured({Constants.CUSTOMER_ROLE})
@@ -46,6 +49,25 @@ public class OrderRestController {
                 .body(Collections.singletonMap(
                         Constants.RESPONSE_MESSAGE_KEY,
                         Constants.ORDER_CREATED_MESSAGE
+                ));
+    }
+
+    @Secured({Constants.CUSTOMER_ROLE})
+    @Operation(summary = "Add a order",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Order created",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Order already exists",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PostMapping("/detail")
+    public ResponseEntity<Map<String, String>> createOrderDish(@Valid @RequestBody OrderDishRequestDto orderDishRequestDto) {
+        orderDishHandler.createOrderDish(orderDishRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(
+                        Constants.RESPONSE_MESSAGE_KEY,
+                        Constants.ORDER_DETAIL_CREATED_MESSAGE
                 ));
     }
 }

@@ -5,6 +5,9 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.DishAlreadyExistsEx
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCustomerException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderReceivesNoMoreDishesException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
@@ -32,6 +35,9 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.NO_DATA_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_ALREADY_EXISTS_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_BELONG_CUSTOMER_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_FOUND_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_RECEIVES_DISHES_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.OWNER_NOT_AUTHORIZED_FOR_UPDATE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESPONSE_ERROR_MESSAGE_KEY;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_ALREADY_EXISTS_MESSAGE;
@@ -127,6 +133,24 @@ public class ControllerAdvisor {
             OrderAlreadyExistsException orderAlreadyExistsException) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_ALREADY_EXISTS_MESSAGE));
+    }
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleOrderNotFoundException(
+            OrderNotFoundException orderNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_FOUND_MESSAGE));
+    }
+    @ExceptionHandler(OrderNotBelongCustomerException.class)
+    public ResponseEntity<Map<String, String>> handleOrderNotBelongCustomerException(
+            OrderNotBelongCustomerException orderNotBelongCustomerException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_BELONG_CUSTOMER_MESSAGE));
+    }
+    @ExceptionHandler(OrderReceivesNoMoreDishesException.class)
+    public ResponseEntity<Map<String, String>> handleOrderReceivesNoMoreDishesException(
+            OrderReceivesNoMoreDishesException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_RECEIVES_DISHES_MESSAGE));
     }
     @ExceptionHandler(ValidationModelException.class)
     public ResponseEntity<Map<String, Map<String, String>>> handleValidationModelException(

@@ -29,7 +29,11 @@ public class Constants {
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found";
     public static final String ORDER_CREATED_MESSAGE = "Order created successfully";
+    public static final String ORDER_DETAIL_CREATED_MESSAGE = "Order detail created successfully";
     public static final String ORDER_ALREADY_EXISTS_MESSAGE = "Order already exists";
+    public static final String ORDER_NOT_FOUND_MESSAGE = "Order not found";
+    public static final String ORDER_NOT_BELONG_CUSTOMER_MESSAGE = "Order does not belong to the customer";
+    public static final String ORDER_NOT_RECEIVES_DISHES_MESSAGE = "Order receives no more dishes";
     public static final String PENDING_STATUS = "PENDING";
     public static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
     public static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 3600L;
