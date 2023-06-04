@@ -1,8 +1,12 @@
 package com.pragma.powerup.usermicroservice.domain.usecase;
 
+import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RoleNotAllowedForCreationException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
@@ -40,6 +44,10 @@ class RestaurantUseCaseTest {
         UserModel userModel = RestaurantTestDataFactory.getUserOwnerFromSetters();
 
         //When
+        Mockito.when(restaurantPersistencePort.getAuthenticatedRole())
+                .thenReturn(Constants.ADMIN_ROLE_NAME);
+        Mockito.when(restaurantPersistencePort.existsRestaurantByTaxIdNumber(restaurantModel.getTaxIdNumber()))
+                .thenReturn(false);
         Mockito.when(userFeignClientPort.getUserById(restaurantModel.getIdOwner())).thenReturn(userModel);
         Mockito.doNothing().when(restaurantPersistencePort).createRestaurant(restaurantModel);
         restaurantUseCase.createRestaurant(restaurantModel);
@@ -55,6 +63,10 @@ class RestaurantUseCaseTest {
         UserModel userModel = RestaurantTestDataFactory.getUserOwnerFromSetters();
 
         //When
+        Mockito.when(restaurantPersistencePort.getAuthenticatedRole())
+                .thenReturn(Constants.ADMIN_ROLE_NAME);
+        Mockito.when(restaurantPersistencePort.existsRestaurantByTaxIdNumber(restaurantModel.getTaxIdNumber()))
+                .thenReturn(false);
         Mockito.when(userFeignClientPort.getUserById(restaurantModel.getIdOwner())).thenReturn(userModel);
         Mockito.doNothing().when(restaurantPersistencePort).createRestaurant(restaurantModel);
         restaurantUseCase.createRestaurant(restaurantModel);
@@ -77,28 +89,69 @@ class RestaurantUseCaseTest {
 
     @Test
     void shouldThrowNullPointerException() {
-        //Given
-        RestaurantModel withoutOwner = RestaurantTestDataFactory.getRestaurantWithoutOwner();
-
         //Then
         assertThrows(NullPointerException.class,
-                () -> restaurantUseCase.createRestaurant(withoutOwner));
+                () -> restaurantUseCase.createRestaurant(null));
+    }
+
+    @Test
+    void shouldThrowRoleNotAllowedForCreationException() {
+        //Given
+        RestaurantModel expectedEmptyRestaurant = RestaurantTestDataFactory.getEmptyRestaurant();
+
+        //When
+        Mockito.when(restaurantPersistencePort.getAuthenticatedRole())
+                .thenReturn(Constants.OWNER_ROLE_NAME);
+
+        //Then
+        assertThrows(RoleNotAllowedForCreationException.class,
+                () -> restaurantUseCase.createRestaurant(expectedEmptyRestaurant));
     }
 
     @Test
     void shouldThrowValidationModelException() {
         //Given
         RestaurantModel expectedEmptyRestaurant = RestaurantTestDataFactory.getEmptyRestaurant();
-        UserModel userModel = RestaurantTestDataFactory.getUserOwnerFromSetters();
 
         //When
-        Mockito.when(userFeignClientPort.getUserById(expectedEmptyRestaurant.getIdOwner()))
-                .thenReturn(userModel);
+        Mockito.when(restaurantPersistencePort.getAuthenticatedRole())
+                .thenReturn(Constants.ADMIN_ROLE_NAME);
 
         //Then
         assertThrows(ValidationModelException.class,
                 () -> restaurantUseCase.createRestaurant(expectedEmptyRestaurant));
 
+    }
+
+    @Test
+    void shouldThrowRestaurantAlreadyExistsException() {
+        //Given
+        RestaurantModel expected = RestaurantTestDataFactory.getRestaurantFromSetters();
+
+        //When
+        Mockito.when(restaurantPersistencePort.getAuthenticatedRole())
+                .thenReturn(Constants.ADMIN_ROLE_NAME);
+        Mockito.when(restaurantPersistencePort.existsRestaurantByTaxIdNumber(expected.getTaxIdNumber()))
+                .thenReturn(true);
+        //Then
+        assertThrows(RestaurantAlreadyExistsException.class,
+                () -> restaurantUseCase.createRestaurant(expected));
+    }
+
+    @Test
+    void shouldThrowUserNorFoundException() {
+        //Given
+        RestaurantModel expected = RestaurantTestDataFactory.getRestaurantFromSetters();
+
+        //When
+        Mockito.when(restaurantPersistencePort.getAuthenticatedRole())
+                .thenReturn(Constants.ADMIN_ROLE_NAME);
+        Mockito.when(restaurantPersistencePort.existsRestaurantByTaxIdNumber(expected.getTaxIdNumber()))
+                .thenReturn(false);
+        Mockito.when(userFeignClientPort.getUserById(expected.getIdOwner())).thenReturn(null);
+        //Then
+        assertThrows(UserNotFoundException.class,
+                () -> restaurantUseCase.createRestaurant(expected));
     }
 
     @Test
@@ -108,6 +161,10 @@ class RestaurantUseCaseTest {
         UserModel userAdmin = RestaurantTestDataFactory.getUserAdminFromSetters();
 
         //When
+        Mockito.when(restaurantPersistencePort.getAuthenticatedRole())
+                .thenReturn(Constants.ADMIN_ROLE_NAME);
+        Mockito.when(restaurantPersistencePort.existsRestaurantByTaxIdNumber(differentIdOwner.getTaxIdNumber()))
+                .thenReturn(false);
         Mockito.when(userFeignClientPort.getUserById(differentIdOwner.getIdOwner())).thenReturn(userAdmin);
 
         //Then
@@ -126,9 +183,13 @@ class RestaurantUseCaseTest {
 
         //Then
         verify(restaurantPersistencePort).getRestaurantById(1L);
+
+    }
+
+    @Test
+    void shouldThrowRestaurantNotFoundException() {
         assertThrows(RestaurantNotFoundException.class,
                 () -> restaurantUseCase.getRestaurantById(10L));
-
     }
 
     @Test
@@ -155,7 +216,7 @@ class RestaurantUseCaseTest {
     }
 
     @Test
-    void shouldThrowValidationModelExceptionInGetAllRestaurants() {
+    void shouldThrowNoDataFoundException() {
         //Given
         List<RestaurantModel> expectedEmptyList = RestaurantTestDataFactory.getEmptyRestaurantList();
 

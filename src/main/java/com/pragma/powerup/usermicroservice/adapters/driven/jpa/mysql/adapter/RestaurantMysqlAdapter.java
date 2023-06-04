@@ -2,6 +2,7 @@ package com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.RestaurantEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantRepository;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.utils.ExtractAuthorization;
 import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
 import com.pragma.powerup.usermicroservice.domain.spi.RestaurantPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -43,4 +44,10 @@ public class RestaurantMysqlAdapter implements RestaurantPersistencePort {
     public boolean existsRestaurantByTaxIdNumber(String taxIdNumber) {
         return restaurantRepository.existsByTaxIdNumber(taxIdNumber);
     }
+
+    @Override
+    public String getAuthenticatedRole() {
+        return ExtractAuthorization.getAuthenticatedRole();
+    }
+
 }

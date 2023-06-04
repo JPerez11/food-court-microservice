@@ -11,5 +11,6 @@ public interface RestaurantPersistencePort {
     List<RestaurantModel> getAllRestaurants(int pageNumber, int pageSize);
     // Methods to catch truth value
     boolean existsRestaurantByTaxIdNumber(String taxIdNumber);
+    String getAuthenticatedRole();
 
 }

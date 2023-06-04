@@ -57,13 +57,9 @@ class DishUseCaseTest {
 
     @Test
     void shouldThrowNullPointerException() {
-        //Given
-        DishModel nullDish = new DishModel();
-
-
         //Then
         assertThrows(NullPointerException.class,
-                () -> dishUseCase.createDish(nullDish));
+                () -> dishUseCase.createDish(null));
     }
 
     @Test

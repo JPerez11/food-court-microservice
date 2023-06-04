@@ -1,17 +1,23 @@
 package com.pragma.powerup.usermicroservice.domain.usecase;
 
+import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantServicePort;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RoleNotAllowedForCreationException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
 import com.pragma.powerup.usermicroservice.domain.model.UserModel;
 import com.pragma.powerup.usermicroservice.domain.spi.RestaurantPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.validations.RestaurantValidation;
-import com.pragma.powerup.usermicroservice.domain.validations.UserValidation;
 
 import java.util.List;
+import java.util.Objects;
+
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.OWNER_ROLE_NAME;
 
 public class RestaurantUseCase implements RestaurantServicePort {
 
@@ -29,12 +35,20 @@ public class RestaurantUseCase implements RestaurantServicePort {
         if (restaurantModel == null) {
             throw new NullPointerException();
         }
+        if (!Objects.equals(restaurantPersistencePort.getAuthenticatedRole(), Constants.ADMIN_ROLE_NAME)) {
+            throw new RoleNotAllowedForCreationException();
+        }
+        RestaurantValidation.restaurantValidate(restaurantModel);
         if (restaurantPersistencePort.existsRestaurantByTaxIdNumber(restaurantModel.getTaxIdNumber())) {
             throw new RestaurantAlreadyExistsException();
         }
         UserModel userModel = userFeignClientPort.getUserById(restaurantModel.getIdOwner());
-        UserValidation.validateOwner(userModel.getRoleModel());
-        RestaurantValidation.restaurantValidate(restaurantModel);
+        if (userModel == null) {
+            throw new UserNotFoundException();
+        }
+        if (!OWNER_ROLE_NAME.equals(userModel.getRoleModel().getName())) {
+            throw new RestaurantOwnerIdException();
+        }
         restaurantPersistencePort.createRestaurant(restaurantModel);
     }
 
@@ -44,7 +58,6 @@ public class RestaurantUseCase implements RestaurantServicePort {
         if (restaurantModel == null) {
             throw new RestaurantNotFoundException();
         }
-        RestaurantValidation.getRestaurantValidate(restaurantModel);
         return restaurantModel;
     }
 
@@ -54,7 +67,6 @@ public class RestaurantUseCase implements RestaurantServicePort {
         if (restaurantModelList.isEmpty()) {
             throw new NoDataFoundException();
         }
-        RestaurantValidation.getAllRestaurantsValidate(restaurantModelList);
         return restaurantModelList;
     }
 }
