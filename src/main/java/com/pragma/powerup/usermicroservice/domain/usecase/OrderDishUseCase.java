@@ -1,7 +1,9 @@
 package com.pragma.powerup.usermicroservice.domain.usecase;
 
 import com.pragma.powerup.usermicroservice.domain.api.OrderDishServicePort;
+import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotBelongRestaurantException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.EmployeeNoOrdersException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCustomerException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderReceivesNoMoreDishesException;
@@ -34,8 +36,14 @@ public class OrderDishUseCase implements OrderDishServicePort {
         if (!orderDishPersistencePort.existsOrderByOrderIdAndCustomerIdAndStatus(idOrder, idUser)) {
             throw new OrderReceivesNoMoreDishesException();
         }
-        if (!orderDishPersistencePort.existsDishById(orderDishModel.getDishModel().getId())) {
+        orderDishModel.setOrderModel(orderDishPersistencePort.findOrderById(idOrder));
+        Long idDish = orderDishModel.getDishModel().getId();
+        if (!orderDishPersistencePort.existsDishById(idDish)) {
             throw new DishNotFoundException();
+        }
+        Long idRestaurant = orderDishModel.getOrderModel().getRestaurantModel().getId();
+        if (!orderDishPersistencePort.existsDishByIdAndRestaurantId(idDish, idRestaurant)) {
+            throw new DishNotBelongRestaurantException();
         }
         orderDishPersistencePort.createOrderDish(orderDishModel);
     }
@@ -46,7 +54,11 @@ public class OrderDishUseCase implements OrderDishServicePort {
     }
 
     @Override
-    public List<OrderDishModel> listOrderDish(int page, int size, Long id, String status) {
+    public List<OrderDishModel> listOrderDish(int page, int size, String status) {
+        Long id = orderDishPersistencePort.getAuthenticatedUserId();
+        if (!orderDishPersistencePort.existsOrderByEmployeeId(id)) {
+            throw new EmployeeNoOrdersException();
+        }
         return orderDishPersistencePort.listOrderDish(page, size, id, status);
     }
 }

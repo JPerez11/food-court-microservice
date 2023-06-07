@@ -1,6 +1,7 @@
 package com.pragma.powerup.usermicroservice.domain.spi;
 
 import com.pragma.powerup.usermicroservice.domain.model.OrderDishModel;
+import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
 
 import java.util.List;
 
@@ -14,5 +15,8 @@ public interface OrderDishPersistencePort {
     boolean existsOrderByOrderIdAndCustomerId(Long idOrder, Long idCustomer);
     boolean existsOrderByOrderIdAndCustomerIdAndStatus(Long idOrder, Long idCustomer);
     boolean existsDishById(Long idDish);
+    boolean existsDishByIdAndRestaurantId(Long idDish, Long idRestaurant);
+    boolean existsOrderByEmployeeId(Long idEmployee);
+    OrderModel findOrderById(Long idOrder);
 
 }

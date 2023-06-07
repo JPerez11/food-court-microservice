@@ -6,8 +6,6 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsE
 import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
 
-import java.util.List;
-
 public class OrderUseCase implements OrderServicePort {
 
     private final OrderPersistencePort orderPersistencePort;
@@ -28,8 +26,4 @@ public class OrderUseCase implements OrderServicePort {
         orderPersistencePort.createOrder(orderModel);
     }
 
-    @Override
-    public List<OrderModel> listOrder(int page, int size, Long id, String status) {
-        return orderPersistencePort.listOrder(page, size, id, status);
-    }
 }

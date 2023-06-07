@@ -2,7 +2,9 @@ package com.pragma.powerup.usermicroservice.configuration;
 
 import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishAlreadyExistsException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotBelongRestaurantException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.EmployeeNoOrdersException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCustomerException;
@@ -32,7 +34,9 @@ import java.util.Map;
 
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.CATEGORY_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_ALREADY_EXISTS_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_BELONG_RESTAURANT_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_FOUND_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.EMPLOYEE_NO_ORDERS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.NO_DATA_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_BELONG_CUSTOMER_MESSAGE;
@@ -151,6 +155,18 @@ public class ControllerAdvisor {
             OrderReceivesNoMoreDishesException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_RECEIVES_DISHES_MESSAGE));
+    }
+    @ExceptionHandler(DishNotBelongRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handleDishNotBelongRestaurantException(
+            DishNotBelongRestaurantException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_NOT_BELONG_RESTAURANT_MESSAGE));
+    }
+    @ExceptionHandler(EmployeeNoOrdersException.class)
+    public ResponseEntity<Map<String, String>> handleEmployeeNoOrdersException(
+            EmployeeNoOrdersException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, EMPLOYEE_NO_ORDERS_MESSAGE));
     }
     @ExceptionHandler(ValidationModelException.class)
     public ResponseEntity<Map<String, Map<String, String>>> handleValidationModelException(

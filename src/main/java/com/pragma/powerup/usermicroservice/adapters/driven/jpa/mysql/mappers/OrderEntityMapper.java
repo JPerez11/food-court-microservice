@@ -13,6 +13,7 @@ public interface OrderEntityMapper {
 
     @Mapping(target = "restaurantEntity", source = "restaurantModel")
     OrderEntity toOrderEntity(OrderModel orderModel);
+    @Mapping(target = "restaurantModel", source = "restaurantEntity")
     OrderModel toOrderModel(OrderEntity orderEntity);
 
 }

@@ -8,5 +8,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     boolean existsByIdAndIdCustomer(Long idOrder, Long idCustomer);
     boolean existsByIdCustomerAndStatusContainingIgnoreCase(Long idCustomer, String status);
     boolean existsByIdAndIdCustomerAndStatusContainingIgnoreCase(Long idOrder, Long idCustomer, String status);
-
+    boolean existsByIdEmployee(Long idEmployee);
 }

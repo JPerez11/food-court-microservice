@@ -1,5 +1,6 @@
 package com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter;
 
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.entity.OrderDishEntity;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.DishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.OrderDishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.OrderEntityMapper;
@@ -9,11 +10,14 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositorie
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.utils.ExtractAuthorization;
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.model.OrderDishModel;
+import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderDishPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Transactional
@@ -39,7 +43,11 @@ public class OrderDishMysqlAdapter implements OrderDishPersistencePort {
 
     @Override
     public List<OrderDishModel> listOrderDish(int page, int size, Long id, String status) {
-        return Collections.emptyList();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<OrderDishEntity> orderDishEntityPage =
+                orderDishRepository.findAllByOrderEntityIdEmployeeAndOrderEntityStatusContainingIgnoreCase(
+                        id, status, pageable);
+        return orderDishEntityMapper.toModelList(orderDishEntityPage.getContent());
     }
 
     @Override
@@ -58,6 +66,16 @@ public class OrderDishMysqlAdapter implements OrderDishPersistencePort {
     }
 
     @Override
+    public boolean existsOrderByEmployeeId(Long idEmployee) {
+        return orderRepository.existsByIdEmployee(idEmployee);
+    }
+
+    @Override
+    public OrderModel findOrderById(Long idOrder) {
+        return orderEntityMapper.toOrderModel(orderRepository.findById(idOrder).orElse(null));
+    }
+
+    @Override
     public boolean existsOrderByOrderIdAndCustomerIdAndStatus(Long idOrder, Long idCustomer) {
         return orderRepository.existsByIdAndIdCustomerAndStatusContainingIgnoreCase(
                 idOrder, idCustomer, Constants.PENDING_STATUS);
@@ -66,6 +84,11 @@ public class OrderDishMysqlAdapter implements OrderDishPersistencePort {
     @Override
     public boolean existsDishById(Long idDish) {
         return dishRepository.existsById(idDish);
+    }
+
+    @Override
+    public boolean existsDishByIdAndRestaurantId(Long idDish, Long idRestaurant) {
+        return dishRepository.existsByIdAndRestaurantEntityId(idDish, idRestaurant);
     }
 
 }

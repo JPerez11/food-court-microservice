@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DishRepository extends JpaRepository<DishEntity, Long> {
 
+    boolean existsByIdAndRestaurantEntityId(Long idDish, Long idRestaurant);
     Page<DishEntity> findAllByCategoryEntityNameContainingIgnoreCaseAndRestaurantEntityId(String categoryName, Long id,
                                                                                           Pageable pageable);
 
