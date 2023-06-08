@@ -3,9 +3,12 @@ package com.pragma.powerup.usermicroservice.domain.usecase;
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmployeeException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
+
+import java.util.Objects;
 
 public class OrderUseCase implements OrderServicePort {
 
@@ -38,7 +41,25 @@ public class OrderUseCase implements OrderServicePort {
         }
         Long idEmployee = orderPersistencePort.getAuthenticatedUserId();
         orderDb.setIdEmployee(idEmployee);
-        orderPersistencePort.assignEmployee(orderDb);
+        orderPersistencePort.updateOrder(orderDb);
+    }
+
+    @Override
+    public void updateOrderStatus(Long idOrder, String status) {
+        if (!orderPersistencePort.existsOrderById(idOrder)) {
+            throw new OrderNotFoundException();
+        }
+        OrderModel orderDb = orderPersistencePort.getOrderById(idOrder);
+        if (orderDb == null) {
+            throw new NullPointerException();
+        }
+        Long idEmployee = orderPersistencePort.getAuthenticatedUserId();
+        if (Objects.equals(orderDb.getIdEmployee(), idEmployee)) {
+            throw new OrderNotAssignEmployeeException();
+        }
+        orderDb.setStatus(status.toUpperCase());
+
+        orderPersistencePort.updateOrder(orderDb);
     }
 
 }

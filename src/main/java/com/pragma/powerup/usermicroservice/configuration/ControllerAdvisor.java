@@ -7,6 +7,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundExcepti
 import com.pragma.powerup.usermicroservice.domain.exceptions.EmployeeNoOrdersException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmployeeException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCustomerException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderReceivesNoMoreDishesException;
@@ -39,6 +40,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.EMPLOYEE_NO_ORDERS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.NO_DATA_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_ALREADY_EXISTS_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_ASSIGN_EMPLOYEE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_BELONG_CUSTOMER_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_RECEIVES_DISHES_MESSAGE;
@@ -147,7 +149,7 @@ public class ControllerAdvisor {
     @ExceptionHandler(OrderNotBelongCustomerException.class)
     public ResponseEntity<Map<String, String>> handleOrderNotBelongCustomerException(
             OrderNotBelongCustomerException orderNotBelongCustomerException) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_BELONG_CUSTOMER_MESSAGE));
     }
     @ExceptionHandler(OrderReceivesNoMoreDishesException.class)
@@ -159,7 +161,7 @@ public class ControllerAdvisor {
     @ExceptionHandler(DishNotBelongRestaurantException.class)
     public ResponseEntity<Map<String, String>> handleDishNotBelongRestaurantException(
             DishNotBelongRestaurantException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_NOT_BELONG_RESTAURANT_MESSAGE));
     }
     @ExceptionHandler(EmployeeNoOrdersException.class)
@@ -167,6 +169,12 @@ public class ControllerAdvisor {
             EmployeeNoOrdersException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, EMPLOYEE_NO_ORDERS_MESSAGE));
+    }
+    @ExceptionHandler(OrderNotAssignEmployeeException.class)
+    public ResponseEntity<Map<String, String>> handleOrderNotAssignEmployeeException(
+            OrderNotAssignEmployeeException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_ASSIGN_EMPLOYEE_MESSAGE));
     }
     @ExceptionHandler(ValidationModelException.class)
     public ResponseEntity<Map<String, Map<String, String>>> handleValidationModelException(

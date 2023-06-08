@@ -40,7 +40,7 @@ public class OrderMysqlAdapter implements OrderPersistencePort {
     }
 
     @Override
-    public void assignEmployee(OrderModel orderModel) {
+    public void updateOrder(OrderModel orderModel) {
         orderRepository.save(orderEntityMapper.toOrderEntity(orderModel));
     }
 

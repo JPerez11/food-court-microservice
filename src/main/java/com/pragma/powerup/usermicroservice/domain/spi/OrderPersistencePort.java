@@ -8,6 +8,6 @@ public interface OrderPersistencePort {
     boolean existsOrderByCustomer(Long id);
     boolean existsOrderById(Long id);
     Long getAuthenticatedUserId();
-    void assignEmployee(OrderModel orderModel);
+    void updateOrder(OrderModel orderModel);
     OrderModel getOrderById(Long id);
 }

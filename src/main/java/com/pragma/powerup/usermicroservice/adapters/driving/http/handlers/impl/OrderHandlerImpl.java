@@ -23,4 +23,9 @@ public class OrderHandlerImpl implements OrderHandler {
     public void assignEmployee(Long id) {
         orderServicePort.assignEmployee(id);
     }
+
+    @Override
+    public void updateOrderStatus(Long id, String status) {
+        orderServicePort.updateOrderStatus(id, status);
+    }
 }

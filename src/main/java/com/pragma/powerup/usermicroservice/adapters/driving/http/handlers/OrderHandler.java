@@ -6,5 +6,6 @@ public interface OrderHandler {
 
     void createOrder(OrderRequestDto orderRequest);
     void assignEmployee(Long id);
+    void updateOrderStatus(Long id, String status);
 
 }

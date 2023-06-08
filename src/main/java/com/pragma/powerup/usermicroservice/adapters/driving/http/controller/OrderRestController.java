@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -103,6 +104,18 @@ public class OrderRestController {
         return ResponseEntity.ok(orderDishHandler.getOrdersByStatus(page, size, status));
     }
 
+    @Secured({Constants.EMPLOYEE_ROLE})
+    @Operation(summary = "Assign employee to order",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Employee assignment successfully",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "Order not found",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "409", description = "Parameter conflict",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
     @PatchMapping("/assign")
     public ResponseEntity<Map<String, String>> assignEmployee(
             @Parameter(description = "Id of the order to be assigned to") @RequestParam Long id) {
@@ -112,4 +125,28 @@ public class OrderRestController {
                         Constants.RESPONSE_MESSAGE_KEY,
                         Constants.ASSIGN_EMPLOYEE_MESSAGE));
     }
+
+    @Secured({Constants.EMPLOYEE_ROLE})
+    @Operation(summary = "Update order status",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Status updated successfully",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "Order not found",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "409", description = "Parameter conflict",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PatchMapping("/status/{id}")
+    public ResponseEntity<Map<String, String>> updateOrderStatus(
+            @PathVariable Long id,
+            @Parameter(description = "Id of the order to be assigned to") @RequestParam String status) {
+        orderHandler.updateOrderStatus(id, status);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(
+                        Constants.RESPONSE_MESSAGE_KEY,
+                        Constants.STATUS_UPDATED_MESSAGE));
+    }
+
 }
