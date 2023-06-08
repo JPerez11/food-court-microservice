@@ -7,6 +7,7 @@ public class Constants {
         throw new IllegalStateException("Utility class");
     }
 
+
     public static final String ADMIN_ROLE_NAME = "ADMIN";
     public static final String OWNER_ROLE_NAME = "OWNER";
     public static final String EMPLOYEE_ROLE = "EMPLOYEE";
@@ -30,6 +31,7 @@ public class Constants {
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found";
     public static final String ORDER_CREATED_MESSAGE = "Order created successfully";
+    public static final String ASSIGN_EMPLOYEE_MESSAGE = "Employee assignment successfully";
     public static final String ORDER_DETAIL_CREATED_MESSAGE = "Order detail created successfully";
     public static final String ORDER_ALREADY_EXISTS_MESSAGE = "Order already exists";
     public static final String ORDER_NOT_FOUND_MESSAGE = "Order not found";

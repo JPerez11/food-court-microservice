@@ -5,5 +5,6 @@ import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.Ord
 public interface OrderHandler {
 
     void createOrder(OrderRequestDto orderRequest);
+    void assignEmployee(Long id);
 
 }

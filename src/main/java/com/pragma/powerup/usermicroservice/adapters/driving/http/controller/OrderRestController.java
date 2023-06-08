@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,5 +101,15 @@ public class OrderRestController {
             @Parameter(description = "Size of elements per page") @RequestParam int size,
             @Parameter(description = "Status name to filter orders") @RequestParam String status) {
         return ResponseEntity.ok(orderDishHandler.getOrdersByStatus(page, size, status));
+    }
+
+    @PatchMapping("/assign")
+    public ResponseEntity<Map<String, String>> assignEmployee(
+            @Parameter(description = "Id of the order to be assigned to") @RequestParam Long id) {
+        orderHandler.assignEmployee(id);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(
+                        Constants.RESPONSE_MESSAGE_KEY,
+                        Constants.ASSIGN_EMPLOYEE_MESSAGE));
     }
 }

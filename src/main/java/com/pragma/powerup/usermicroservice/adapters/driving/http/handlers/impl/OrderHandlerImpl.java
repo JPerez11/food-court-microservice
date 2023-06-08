@@ -18,4 +18,9 @@ public class OrderHandlerImpl implements OrderHandler {
     public void createOrder(OrderRequestDto orderRequest) {
         orderServicePort.createOrder(orderRequestMapper.toOrderModel(orderRequest));
     }
+
+    @Override
+    public void assignEmployee(Long id) {
+        orderServicePort.assignEmployee(id);
+    }
 }

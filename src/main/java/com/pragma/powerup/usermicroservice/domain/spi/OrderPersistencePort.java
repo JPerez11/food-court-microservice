@@ -6,4 +6,8 @@ public interface OrderPersistencePort {
 
     void createOrder(OrderModel orderModel);
     boolean existsOrderByCustomer(Long id);
+    boolean existsOrderById(Long id);
+    Long getAuthenticatedUserId();
+    void assignEmployee(OrderModel orderModel);
+    OrderModel getOrderById(Long id);
 }
