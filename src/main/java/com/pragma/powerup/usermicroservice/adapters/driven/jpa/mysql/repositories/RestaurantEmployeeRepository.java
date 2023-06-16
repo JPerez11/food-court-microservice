@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RestaurantEmployeeRepository extends JpaRepository<RestaurantEmployeeEntity,
         RestaurantEmployeeEntity.RestaurantEmployeeId> {
+
+    boolean existsByEmployeeId(Long employeeId);
 }

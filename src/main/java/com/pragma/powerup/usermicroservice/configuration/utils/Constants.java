@@ -10,8 +10,8 @@ public class Constants {
 
     public static final String ADMIN_ROLE_NAME = "ADMIN";
     public static final String OWNER_ROLE_NAME = "OWNER";
-    public static final String EMPLOYEE_ROLE = "EMPLOYEE";
-    public static final String CUSTOMER_ROLE = "CUSTOMER";
+    public static final String EMPLOYEE_ROLE_NAME = "EMPLOYEE";
+    public static final String CUSTOMER_ROLE_NAME = "CUSTOMER";
     public static final String RESPONSE_MESSAGE_KEY = "message";
     public static final String RESPONSE_DATA_KEY = "data";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
@@ -41,6 +41,8 @@ public class Constants {
     public static final String ORDER_NOT_RECEIVES_DISHES_MESSAGE = "Order receives no more dishes";
     public static final String DISH_NOT_BELONG_RESTAURANT_MESSAGE = "The dish does not belong to the restaurant in which it is being ordered";
     public static final String EMPLOYEE_NO_ORDERS_MESSAGE = "Employee has no assigned orders";
+    public static final String EMPLOYEE_ALREADY_ASSIGNED_MESSAGE = "The employee is already assigned to a restaurant";
+    public static final String USER_HAS_NO_EMPLOYEE_ROLE_MESSAGE = "User has no employee role";
     public static final String PENDING_STATUS = "PENDING";
     public static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
     public static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 3600L;

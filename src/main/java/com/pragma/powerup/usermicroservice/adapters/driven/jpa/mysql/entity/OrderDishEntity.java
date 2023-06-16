@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,6 +42,7 @@ public class OrderDishEntity {
     @Getter
     @Setter
     @Embeddable
+    @EqualsAndHashCode
     @NoArgsConstructor
     @AllArgsConstructor
     public static class OrderDishId implements Serializable {

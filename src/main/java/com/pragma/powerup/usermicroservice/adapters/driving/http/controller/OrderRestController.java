@@ -40,7 +40,7 @@ public class OrderRestController {
     private final OrderDishHandler orderDishHandler;
 
 
-    @Secured({Constants.CUSTOMER_ROLE})
+    @Secured({Constants.CUSTOMER_ROLE_NAME})
     @Operation(summary = "Add a order",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Order created successfully",
@@ -62,7 +62,7 @@ public class OrderRestController {
                 ));
     }
 
-    @Secured({Constants.CUSTOMER_ROLE})
+    @Secured({Constants.CUSTOMER_ROLE_NAME})
     @Operation(summary = "Add dish to order",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Detail created successfully",
@@ -84,7 +84,7 @@ public class OrderRestController {
                 ));
     }
 
-    @Secured({Constants.EMPLOYEE_ROLE})
+    @Secured({Constants.EMPLOYEE_ROLE_NAME})
     @Operation(summary = "Obtain orders",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Order obtained successfully",
@@ -104,7 +104,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderDishHandler.getOrdersByStatus(page, size, status));
     }
 
-    @Secured({Constants.EMPLOYEE_ROLE})
+    @Secured({Constants.EMPLOYEE_ROLE_NAME})
     @Operation(summary = "Assign employee to order",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Employee assignment successfully",
@@ -126,7 +126,7 @@ public class OrderRestController {
                         Constants.ASSIGN_EMPLOYEE_MESSAGE));
     }
 
-    @Secured({Constants.EMPLOYEE_ROLE})
+    @Secured({Constants.EMPLOYEE_ROLE_NAME})
     @Operation(summary = "Update order status",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Status updated successfully",

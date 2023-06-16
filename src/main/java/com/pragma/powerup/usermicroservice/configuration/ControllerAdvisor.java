@@ -4,6 +4,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundExc
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotBelongRestaurantException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.EmployeeAlreadyAssignedException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.EmployeeNoOrdersException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
@@ -16,6 +17,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyEx
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RoleNotAllowedForCreationException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.UserHasNoEmployeeRoleException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
 import feign.FeignException;
@@ -37,6 +39,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_BELONG_RESTAURANT_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_FOUND_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.EMPLOYEE_ALREADY_ASSIGNED_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.EMPLOYEE_NO_ORDERS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.NO_DATA_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_ALREADY_EXISTS_MESSAGE;
@@ -50,6 +53,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_OWNER_ID_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ROLE_NOT_ALLOWED_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.USER_HAS_NO_EMPLOYEE_ROLE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.USER_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.WRONG_CREDENTIALS_MESSAGE;
 
@@ -175,6 +179,18 @@ public class ControllerAdvisor {
             OrderNotAssignEmployeeException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_ASSIGN_EMPLOYEE_MESSAGE));
+    }
+    @ExceptionHandler(EmployeeAlreadyAssignedException.class)
+    public ResponseEntity<Map<String, String>> handleEmployeeAlreadyAssignedException(
+            EmployeeAlreadyAssignedException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, EMPLOYEE_ALREADY_ASSIGNED_MESSAGE));
+    }
+    @ExceptionHandler(UserHasNoEmployeeRoleException.class)
+    public ResponseEntity<Map<String, String>> handleUserIdNotEmployeeRoleException(
+            UserHasNoEmployeeRoleException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_HAS_NO_EMPLOYEE_ROLE_MESSAGE));
     }
     @ExceptionHandler(ValidationModelException.class)
     public ResponseEntity<Map<String, Map<String, String>>> handleValidationModelException(

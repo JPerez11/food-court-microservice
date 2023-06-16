@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,6 +40,7 @@ public class RestaurantEmployeeEntity {
     @Getter
     @Setter
     @Embeddable
+    @EqualsAndHashCode
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RestaurantEmployeeId implements Serializable {

@@ -5,5 +5,7 @@ import com.pragma.powerup.usermicroservice.domain.model.RestaurantEmployeeModel;
 public interface RestaurantEmployeePersistencePort {
 
     void assignEmployee(RestaurantEmployeeModel restaurantEmployeeModel);
-
+    boolean existsAssignedEmployee(Long employeeId);
+    boolean existsRestaurant(Long restaurantId);
+    String getAuthenticatedRole();
 }

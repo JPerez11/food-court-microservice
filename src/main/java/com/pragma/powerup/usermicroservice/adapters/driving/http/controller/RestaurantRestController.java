@@ -95,11 +95,12 @@ public class RestaurantRestController {
                                     schema = @Schema(ref = "#/components/schemas/Map"))),
                     @ApiResponse(responseCode = "403", description = "Unauthorized access",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                                    schema = @Schema(ref = "#/components/schemas/Error"))),
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(ref = "#/components/schemas/Map"))),
-                    @ApiResponse(responseCode = "409", description = "Employee has already been assigned",
+                                    schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "409", description = "Employee has already been assigned or user has " +
+                            "not employee role",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/assign-employee")

@@ -94,11 +94,11 @@ public class BeanConfiguration {
     }
     @Bean
     public RestaurantEmployeePersistencePort restaurantEmployeePersistencePort() {
-        return new RestaurantEmployeeMysqlAdapter(restaurantEmployeeRepository, restaurantEmployeeEntityMapper);
+        return new RestaurantEmployeeMysqlAdapter(restaurantEmployeeRepository, restaurantRepository, restaurantEmployeeEntityMapper);
     }
     @Bean
     public RestaurantEmployeeServicePort restaurantEmployeeServicePort() {
-        return new RestaurantEmployeeUseCase(restaurantEmployeePersistencePort());
+        return new RestaurantEmployeeUseCase(restaurantEmployeePersistencePort(), feignClientPort());
     }
     @Bean
     public UserFeignClientPort feignClientPort() {
