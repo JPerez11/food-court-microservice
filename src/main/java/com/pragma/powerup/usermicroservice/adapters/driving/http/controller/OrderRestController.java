@@ -1,7 +1,6 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.OrderDishRequestDto;
-import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.OrderRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.OrderDishHandler;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.OrderHandler;
@@ -52,9 +51,9 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "409", description = "Order already exists",
                         content = @Content(mediaType = "application/json",
                                 schema = @Schema(ref = "#/components/schemas/Error")))})
-    @PostMapping("/order")
-    public ResponseEntity<Map<String, String>> createOrder(@Valid @RequestBody OrderRequestDto orderRequest) {
-        orderHandler.createOrder(orderRequest);
+    @PostMapping("/header")
+    public ResponseEntity<Map<String, String>> createOrder(@RequestParam Long restaurantId) {
+        orderHandler.createOrder(restaurantId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(
                         Constants.RESPONSE_MESSAGE_KEY,

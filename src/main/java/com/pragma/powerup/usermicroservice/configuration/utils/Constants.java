@@ -17,7 +17,6 @@ public class Constants {
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
     public static final String WRONG_CREDENTIALS_MESSAGE = "Wrong credentials";
     public static final String USER_NOT_FOUND_MESSAGE = "No user found with the role provided";
-    public static final String ROLE_NOT_FOUND_MESSAGE = "No role found with the id provided";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "Permission to create with that role has not been granted";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with that id";
@@ -44,8 +43,8 @@ public class Constants {
     public static final String EMPLOYEE_ALREADY_ASSIGNED_MESSAGE = "The employee is already assigned to a restaurant";
     public static final String USER_HAS_NO_EMPLOYEE_ROLE_MESSAGE = "User has no employee role";
     public static final String PENDING_STATUS = "PENDING";
+    public static final String PREPARING_STATUS = "PREPARING";
     public static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
-    public static final Long ACCESS_TOKEN_VALIDITY_SECONDS = 3600L;
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
     public static final String SWAGGER_VERSION_MESSAGE = "1.0.0";

@@ -5,9 +5,12 @@ import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmployeeException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
+import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class OrderUseCase implements OrderServicePort {
@@ -19,14 +22,24 @@ public class OrderUseCase implements OrderServicePort {
     }
 
     @Override
-    public void createOrder(OrderModel orderModel) {
-        if (orderModel == null) {
+    public void createOrder(Long restaurantId) {
+        if (restaurantId == null) {
             throw new NullPointerException();
         }
-        if (orderPersistencePort.existsOrderByCustomer(orderModel.getIdCustomer())) {
+        Long customerId = orderPersistencePort.getAuthenticatedUserId();
+        if (orderPersistencePort.existsOrderByCustomer(customerId)) {
             throw new OrderAlreadyExistsException();
         }
+        if (!orderPersistencePort.existsRestaurantById(restaurantId)) {
+            throw new RestaurantNotFoundException();
+        }
+        RestaurantModel restaurantModel = new RestaurantModel();
+        restaurantModel.setId(restaurantId);
+        OrderModel orderModel = new OrderModel();
+        orderModel.setIdCustomer(customerId);
+        orderModel.setDate(LocalDateTime.now());
         orderModel.setStatus(Constants.PENDING_STATUS);
+        orderModel.setRestaurantModel(restaurantModel);
         orderPersistencePort.createOrder(orderModel);
     }
 
@@ -41,6 +54,7 @@ public class OrderUseCase implements OrderServicePort {
         }
         Long idEmployee = orderPersistencePort.getAuthenticatedUserId();
         orderDb.setIdEmployee(idEmployee);
+        orderDb.setStatus(Constants.PREPARING_STATUS);
         orderPersistencePort.updateOrder(orderDb);
     }
 

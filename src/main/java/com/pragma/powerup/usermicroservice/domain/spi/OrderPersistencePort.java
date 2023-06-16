@@ -10,4 +10,5 @@ public interface OrderPersistencePort {
     Long getAuthenticatedUserId();
     void updateOrder(OrderModel orderModel);
     OrderModel getOrderById(Long id);
+    boolean existsRestaurantById(Long restaurantId);
 }
