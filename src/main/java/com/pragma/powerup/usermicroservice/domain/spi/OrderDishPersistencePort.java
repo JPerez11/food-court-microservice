@@ -9,7 +9,7 @@ public interface OrderDishPersistencePort {
 
     void createOrderDish(OrderDishModel orderDishModel);
     void createAllOrderDishes(List<OrderDishModel> orderDishList);
-    List<OrderDishModel> listOrderDish(int page, int size, Long id, String status);
+    List<OrderDishModel> listOrderDish(int page, int size, Long employeeId, Long restaurantId, String status);
     Long getAuthenticatedUserId();
     boolean existsOrderById(Long idOrder);
     boolean existsOrderByOrderIdAndCustomerId(Long idOrder, Long idCustomer);
@@ -17,6 +17,7 @@ public interface OrderDishPersistencePort {
     boolean existsDishById(Long idDish);
     boolean existsDishByIdAndRestaurantId(Long idDish, Long idRestaurant);
     boolean existsOrderByEmployeeId(Long idEmployee);
+    Long findRestaurantEmployee(Long employeeId);
     OrderModel findOrderById(Long idOrder);
 
 }

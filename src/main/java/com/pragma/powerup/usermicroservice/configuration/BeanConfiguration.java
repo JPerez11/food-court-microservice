@@ -85,8 +85,8 @@ public class BeanConfiguration {
     }
     @Bean
     public OrderDishPersistencePort orderDishPersistencePort() {
-        return new OrderDishMysqlAdapter(orderDishRepository, orderRepository, dishRepository, orderDishEntityMapper,
-                orderEntityMapper, dishEntityMapper);
+        return new OrderDishMysqlAdapter(orderDishRepository, orderRepository, dishRepository,
+                restaurantEmployeeRepository, orderDishEntityMapper, orderEntityMapper);
     }
     @Bean
     public OrderDishServicePort orderDishServicePort() {

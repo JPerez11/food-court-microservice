@@ -7,6 +7,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.EmployeeNoOrdersExc
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCustomerException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderReceivesNoMoreDishesException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.model.OrderDishModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderDishPersistencePort;
 
@@ -55,10 +56,14 @@ public class OrderDishUseCase implements OrderDishServicePort {
 
     @Override
     public List<OrderDishModel> listOrderDish(int page, int size, String status) {
-        Long id = orderDishPersistencePort.getAuthenticatedUserId();
-        if (!orderDishPersistencePort.existsOrderByEmployeeId(id)) {
+        Long employeeId = orderDishPersistencePort.getAuthenticatedUserId();
+        if (!orderDishPersistencePort.existsOrderByEmployeeId(employeeId)) {
             throw new EmployeeNoOrdersException();
         }
-        return orderDishPersistencePort.listOrderDish(page, size, id, status);
+        Long restaurantId = orderDishPersistencePort.findRestaurantEmployee(employeeId);
+        if (restaurantId == null) {
+            throw new RestaurantNotFoundException();
+        }
+        return orderDishPersistencePort.listOrderDish(page, size, employeeId, restaurantId, status);
     }
 }

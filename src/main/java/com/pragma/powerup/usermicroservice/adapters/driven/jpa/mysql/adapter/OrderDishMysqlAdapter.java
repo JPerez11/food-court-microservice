@@ -1,12 +1,12 @@
 package com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.entity.OrderDishEntity;
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.DishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.OrderDishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.OrderEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.DishRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.OrderDishRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.OrderRepository;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantEmployeeRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.utils.ExtractAuthorization;
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.model.OrderDishModel;
@@ -27,9 +27,9 @@ public class OrderDishMysqlAdapter implements OrderDishPersistencePort {
     private final OrderDishRepository orderDishRepository;
     private final OrderRepository orderRepository;
     private final DishRepository dishRepository;
+    private final RestaurantEmployeeRepository restaurantEmployeeRepository;
     private final OrderDishEntityMapper orderDishEntityMapper;
     private final OrderEntityMapper orderEntityMapper;
-    private final DishEntityMapper dishEntityMapper;
 
     @Override
     public void createOrderDish(OrderDishModel orderDishModel) {
@@ -42,11 +42,11 @@ public class OrderDishMysqlAdapter implements OrderDishPersistencePort {
     }
 
     @Override
-    public List<OrderDishModel> listOrderDish(int page, int size, Long id, String status) {
+    public List<OrderDishModel> listOrderDish(int page, int size, Long employeeId, Long restaurantId, String status) {
         Pageable pageable = PageRequest.of(page, size);
         Page<OrderDishEntity> orderDishEntityPage =
-                orderDishRepository.findAllByOrderEntityIdEmployeeAndOrderEntityStatusContainingIgnoreCase(
-                        id, status, pageable);
+                orderDishRepository.findOrderDishWithQuery(
+                        employeeId, restaurantId, status, pageable);
         return orderDishEntityMapper.toModelList(orderDishEntityPage.getContent());
     }
 
@@ -68,6 +68,11 @@ public class OrderDishMysqlAdapter implements OrderDishPersistencePort {
     @Override
     public boolean existsOrderByEmployeeId(Long idEmployee) {
         return orderRepository.existsByIdEmployee(idEmployee);
+    }
+
+    @Override
+    public Long findRestaurantEmployee(Long employeeId) {
+        return restaurantEmployeeRepository.findRestaurantIdByEmployeeId(employeeId);
     }
 
     @Override
