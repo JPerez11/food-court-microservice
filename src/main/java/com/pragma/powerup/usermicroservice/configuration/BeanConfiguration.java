@@ -6,29 +6,35 @@ import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.UserResp
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.DishMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.OrderDishMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.OrderMysqlAdapter;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.RestaurantEmployeeMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.RestaurantMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.CategoryEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.DishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.OrderDishEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.OrderEntityMapper;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.RestaurantEmployeeEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.RestaurantEntityMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.CategoryRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.DishRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.OrderDishRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.OrderRepository;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantEmployeeRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantRepository;
 import com.pragma.powerup.usermicroservice.domain.api.DishServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.OrderDishServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
+import com.pragma.powerup.usermicroservice.domain.api.RestaurantEmployeeServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantServicePort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.spi.DishPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderDishPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
+import com.pragma.powerup.usermicroservice.domain.spi.RestaurantEmployeePersistencePort;
 import com.pragma.powerup.usermicroservice.domain.spi.RestaurantPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.usecase.DishUseCase;
 import com.pragma.powerup.usermicroservice.domain.usecase.OrderDishUseCase;
 import com.pragma.powerup.usermicroservice.domain.usecase.OrderUseCase;
+import com.pragma.powerup.usermicroservice.domain.usecase.RestaurantEmployeeUseCase;
 import com.pragma.powerup.usermicroservice.domain.usecase.RestaurantUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -49,6 +55,8 @@ public class BeanConfiguration {
     private final OrderEntityMapper orderEntityMapper;
     private final OrderDishRepository orderDishRepository;
     private final OrderDishEntityMapper orderDishEntityMapper;
+    private final RestaurantEmployeeRepository restaurantEmployeeRepository;
+    private final RestaurantEmployeeEntityMapper restaurantEmployeeEntityMapper;
 
     @Bean
     public RestaurantServicePort restaurantServicePort() {
@@ -83,6 +91,14 @@ public class BeanConfiguration {
     @Bean
     public OrderDishServicePort orderDishServicePort() {
         return new OrderDishUseCase(orderDishPersistencePort());
+    }
+    @Bean
+    public RestaurantEmployeePersistencePort restaurantEmployeePersistencePort() {
+        return new RestaurantEmployeeMysqlAdapter(restaurantEmployeeRepository, restaurantEmployeeEntityMapper);
+    }
+    @Bean
+    public RestaurantEmployeeServicePort restaurantEmployeeServicePort() {
+        return new RestaurantEmployeeUseCase(restaurantEmployeePersistencePort());
     }
     @Bean
     public UserFeignClientPort feignClientPort() {

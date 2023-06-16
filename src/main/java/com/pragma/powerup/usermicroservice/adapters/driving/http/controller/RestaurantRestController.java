@@ -1,7 +1,9 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.controller;
 
+import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.RestaurantEmployeeRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
+import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.RestaurantEmployeeHandler;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.RestaurantHandler;
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +39,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 public class RestaurantRestController {
 
     private final RestaurantHandler restaurantHandler;
+    private final RestaurantEmployeeHandler restaurantEmployeeHandler;
 
     @Secured({Constants.ADMIN_ROLE_NAME})
     @Operation(summary = "Add a new restaurant",
@@ -48,7 +51,8 @@ public class RestaurantRestController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/")
-    public ResponseEntity<Map<String, String>> createRestaurant(@Valid @RequestBody RestaurantRequestDto restaurantRequest) {
+    public ResponseEntity<Map<String, String>> createRestaurant(@Valid
+                                                                    @RequestBody RestaurantRequestDto restaurantRequest) {
         restaurantHandler.createRestaurant(restaurantRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(RESPONSE_MESSAGE_KEY, RESTAURANT_CREATED_MESSAGE));
@@ -81,5 +85,31 @@ public class RestaurantRestController {
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponseDto> getRestaurantById(@PathVariable Long id) {
         return ResponseEntity.ok(restaurantHandler.getRestaurantById(id));
+    }
+
+    @Secured({Constants.OWNER_ROLE_NAME})
+    @Operation(summary = "Assign employee to restaurant",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Employee assign successfully",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "403", description = "Unauthorized access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "No data found",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Employee has already been assigned",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PostMapping("/assign-employee")
+    public ResponseEntity<Map<String, String>> assignEmployee(@Valid
+                                                                  @RequestBody RestaurantEmployeeRequestDto requestDto) {
+        restaurantEmployeeHandler.assignEmployee(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(
+                        Constants.RESPONSE_MESSAGE_KEY,
+                        Constants.ASSIGN_EMPLOYEE_MESSAGE
+                ));
     }
 }
