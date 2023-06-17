@@ -42,8 +42,13 @@ public class Constants {
     public static final String EMPLOYEE_NO_ORDERS_MESSAGE = "Employee has no assigned orders";
     public static final String EMPLOYEE_ALREADY_ASSIGNED_MESSAGE = "The employee is already assigned to a restaurant";
     public static final String USER_HAS_NO_EMPLOYEE_ROLE_MESSAGE = "User has no employee role";
+    public static final String STATUS_NOT_MODIFIED_MESSAGE = "The status cannot be modified";
+    public static final String CONFLICT_TWILIO_FEIGN_MESSAGE = "An error occurred with the Twilio service";
     public static final String PENDING_STATUS = "PENDING";
     public static final String PREPARING_STATUS = "PREPARING";
+    public static final String READY_STATUS = "READY";
+    public static final String DELIVERED_STATUS = "DELIVERED";
+    public static final String NOTIFICATION_MESSAGE = "The order is now ready!";
     public static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";

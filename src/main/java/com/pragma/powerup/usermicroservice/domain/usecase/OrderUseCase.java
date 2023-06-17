@@ -6,8 +6,14 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsE
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmployeeException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.StatusNotModifiedException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.fpi.TwilioFeignClientPort;
+import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
 import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.model.TwilioModel;
+import com.pragma.powerup.usermicroservice.domain.model.UserModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
 
 import java.time.LocalDateTime;
@@ -16,9 +22,13 @@ import java.util.Objects;
 public class OrderUseCase implements OrderServicePort {
 
     private final OrderPersistencePort orderPersistencePort;
+    private final UserFeignClientPort userFeignClientPort;
+    private final TwilioFeignClientPort twilioFeignClientPort;
 
-    public OrderUseCase(OrderPersistencePort orderPersistencePort) {
+    public OrderUseCase(OrderPersistencePort orderPersistencePort, UserFeignClientPort userFeignClientPort, TwilioFeignClientPort twilioFeignClientPort) {
         this.orderPersistencePort = orderPersistencePort;
+        this.userFeignClientPort = userFeignClientPort;
+        this.twilioFeignClientPort = twilioFeignClientPort;
     }
 
     @Override
@@ -63,16 +73,32 @@ public class OrderUseCase implements OrderServicePort {
         if (!orderPersistencePort.existsOrderById(idOrder)) {
             throw new OrderNotFoundException();
         }
+        if (status.equalsIgnoreCase(Constants.DELIVERED_STATUS)) {
+            throw new StatusNotModifiedException();
+        }
         OrderModel orderDb = orderPersistencePort.getOrderById(idOrder);
         if (orderDb == null) {
             throw new NullPointerException();
         }
         Long idEmployee = orderPersistencePort.getAuthenticatedUserId();
-        if (Objects.equals(orderDb.getIdEmployee(), idEmployee)) {
+        if (!Objects.equals(orderDb.getIdEmployee(), idEmployee)) {
             throw new OrderNotAssignEmployeeException();
         }
-        orderDb.setStatus(status.toUpperCase());
 
+        UserModel userModel = userFeignClientPort.getUserById(orderDb.getIdCustomer());
+        if (userModel == null) {
+            throw new UserNotFoundException();
+        }
+
+        if (status.equalsIgnoreCase(Constants.READY_STATUS)) {
+            twilioFeignClientPort.sendMessage(
+                    new TwilioModel(
+                    Constants.NOTIFICATION_MESSAGE,
+                    userModel.getPhoneNumber())
+            );
+        }
+
+        orderDb.setStatus(status.toUpperCase());
         orderPersistencePort.updateOrder(orderDb);
     }
 

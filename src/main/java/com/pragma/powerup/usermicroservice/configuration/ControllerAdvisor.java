@@ -1,5 +1,6 @@
 package com.pragma.powerup.usermicroservice.configuration;
 
+import com.pragma.powerup.usermicroservice.adapters.driven.feign.exceptions.TwilioFeignClientException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotBelongRestaurantException;
@@ -17,6 +18,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyEx
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RoleNotAllowedForCreationException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.StatusNotModifiedException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserHasNoEmployeeRoleException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
@@ -36,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.CATEGORY_NOT_FOUND_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.CONFLICT_TWILIO_FEIGN_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_BELONG_RESTAURANT_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_FOUND_MESSAGE;
@@ -53,6 +56,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_OWNER_ID_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ROLE_NOT_ALLOWED_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.STATUS_NOT_MODIFIED_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.USER_HAS_NO_EMPLOYEE_ROLE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.USER_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.WRONG_CREDENTIALS_MESSAGE;
@@ -202,5 +206,17 @@ public class ControllerAdvisor {
     public ResponseEntity<String> handleFeignException(FeignException feignException) {
         return ResponseEntity.status(feignException.status())
                 .body(feignException.contentUTF8());
+    }
+    @ExceptionHandler(StatusNotModifiedException.class)
+    public ResponseEntity<Map<String, String>> handleStatusNotModifiedException(
+            StatusNotModifiedException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, STATUS_NOT_MODIFIED_MESSAGE));
+    }
+    @ExceptionHandler(TwilioFeignClientException.class)
+    public ResponseEntity<Map<String, String>> handleTwilioFeignClientException(
+            TwilioFeignClientException ex) {
+        return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CONFLICT_TWILIO_FEIGN_MESSAGE));
     }
 }

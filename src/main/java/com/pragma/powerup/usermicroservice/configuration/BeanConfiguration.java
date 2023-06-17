@@ -1,7 +1,10 @@
 package com.pragma.powerup.usermicroservice.configuration;
 
+import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.TwilioFeignClientAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.UserFeignClientAdapter;
+import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.impl.TwilioFeignClientAdapterImpl;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.impl.UserFeignClientAdapterImpl;
+import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.TwilioRequestMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.UserResponseMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.DishMysqlAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.OrderDishMysqlAdapter;
@@ -25,6 +28,7 @@ import com.pragma.powerup.usermicroservice.domain.api.OrderDishServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantEmployeeServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantServicePort;
+import com.pragma.powerup.usermicroservice.domain.fpi.TwilioFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.spi.DishPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderDishPersistencePort;
@@ -57,10 +61,12 @@ public class BeanConfiguration {
     private final OrderDishEntityMapper orderDishEntityMapper;
     private final RestaurantEmployeeRepository restaurantEmployeeRepository;
     private final RestaurantEmployeeEntityMapper restaurantEmployeeEntityMapper;
+    private final TwilioFeignClientAdapter twilioFeignClientAdapter;
+    private final TwilioRequestMapper twilioRequestMapper;
 
     @Bean
     public RestaurantServicePort restaurantServicePort() {
-        return new RestaurantUseCase(restaurantPersistencePort(), feignClientPort());
+        return new RestaurantUseCase(restaurantPersistencePort(), userFeignClientPort());
     }
     @Bean
     public RestaurantPersistencePort restaurantPersistencePort() {
@@ -81,7 +87,7 @@ public class BeanConfiguration {
     }
     @Bean
     public OrderServicePort orderServicePort() {
-        return new OrderUseCase(orderPersistencePort());
+        return new OrderUseCase(orderPersistencePort(), userFeignClientPort(), twilioFeignClientPort());
     }
     @Bean
     public OrderDishPersistencePort orderDishPersistencePort() {
@@ -98,10 +104,14 @@ public class BeanConfiguration {
     }
     @Bean
     public RestaurantEmployeeServicePort restaurantEmployeeServicePort() {
-        return new RestaurantEmployeeUseCase(restaurantEmployeePersistencePort(), feignClientPort());
+        return new RestaurantEmployeeUseCase(restaurantEmployeePersistencePort(), userFeignClientPort());
     }
     @Bean
-    public UserFeignClientPort feignClientPort() {
+    public UserFeignClientPort userFeignClientPort() {
         return new UserFeignClientAdapterImpl(userFeignClientAdapter, userResponseMapper);
+    }
+    @Bean
+    public TwilioFeignClientPort twilioFeignClientPort() {
+        return new TwilioFeignClientAdapterImpl(twilioFeignClientAdapter, twilioRequestMapper);
     }
 }
