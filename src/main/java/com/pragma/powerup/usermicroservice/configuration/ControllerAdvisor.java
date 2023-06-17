@@ -13,12 +13,12 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmplo
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCustomerException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderReceivesNoMoreDishesException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderStatusCannotChangedException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RoleNotAllowedForCreationException;
-import com.pragma.powerup.usermicroservice.domain.exceptions.StatusNotModifiedException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserHasNoEmployeeRoleException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
@@ -50,13 +50,13 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_BELONG_CUSTOMER_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_RECEIVES_DISHES_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_STATUS_CANNOT_CHANGE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.OWNER_NOT_AUTHORIZED_FOR_UPDATE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESPONSE_ERROR_MESSAGE_KEY;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_OWNER_ID_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ROLE_NOT_ALLOWED_MESSAGE;
-import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.STATUS_NOT_MODIFIED_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.USER_HAS_NO_EMPLOYEE_ROLE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.USER_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.WRONG_CREDENTIALS_MESSAGE;
@@ -207,11 +207,11 @@ public class ControllerAdvisor {
         return ResponseEntity.status(feignException.status())
                 .body(feignException.contentUTF8());
     }
-    @ExceptionHandler(StatusNotModifiedException.class)
-    public ResponseEntity<Map<String, String>> handleStatusNotModifiedException(
-            StatusNotModifiedException ex) {
+    @ExceptionHandler(OrderStatusCannotChangedException.class)
+    public ResponseEntity<Map<String, String>> handleOrderStatusCannotChangeException(
+            OrderStatusCannotChangedException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, STATUS_NOT_MODIFIED_MESSAGE));
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_STATUS_CANNOT_CHANGE_MESSAGE));
     }
     @ExceptionHandler(TwilioFeignClientException.class)
     public ResponseEntity<Map<String, String>> handleTwilioFeignClientException(

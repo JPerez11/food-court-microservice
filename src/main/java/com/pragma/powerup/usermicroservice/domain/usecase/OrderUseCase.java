@@ -5,8 +5,8 @@ import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmployeeException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderStatusCannotChangedException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
-import com.pragma.powerup.usermicroservice.domain.exceptions.StatusNotModifiedException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.fpi.TwilioFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
@@ -73,9 +73,6 @@ public class OrderUseCase implements OrderServicePort {
         if (!orderPersistencePort.existsOrderById(idOrder)) {
             throw new OrderNotFoundException();
         }
-        if (status.equalsIgnoreCase(Constants.DELIVERED_STATUS)) {
-            throw new StatusNotModifiedException();
-        }
         OrderModel orderDb = orderPersistencePort.getOrderById(idOrder);
         if (orderDb == null) {
             throw new NullPointerException();
@@ -83,6 +80,9 @@ public class OrderUseCase implements OrderServicePort {
         Long idEmployee = orderPersistencePort.getAuthenticatedUserId();
         if (!Objects.equals(orderDb.getIdEmployee(), idEmployee)) {
             throw new OrderNotAssignEmployeeException();
+        }
+        if (orderDb.getStatus().equalsIgnoreCase(Constants.DELIVERED_STATUS)) {
+            throw new OrderStatusCannotChangedException();
         }
 
         UserModel userModel = userFeignClientPort.getUserById(orderDb.getIdCustomer());
@@ -96,6 +96,11 @@ public class OrderUseCase implements OrderServicePort {
                     Constants.NOTIFICATION_MESSAGE,
                     userModel.getPhoneNumber())
             );
+        }
+
+        if (!orderDb.getStatus().equalsIgnoreCase(Constants.READY_STATUS) &&
+                status.equalsIgnoreCase(Constants.DELIVERED_STATUS)) {
+            throw new OrderStatusCannotChangedException();
         }
 
         orderDb.setStatus(status.toUpperCase());

@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(name = "messaging-microservice", url = "localhost:8094")
+@FeignClient(name = "messaging-microservice", url = "localhost:8092")
 public interface TwilioFeignClientAdapter {
 
     @PostMapping("/twilio/message")
     ResponseEntity<Map<String, String>> sendMessage(@RequestBody TwilioRequestDto twilioRequest);
-
 
 }
