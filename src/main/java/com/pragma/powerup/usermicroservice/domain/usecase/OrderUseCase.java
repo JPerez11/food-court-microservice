@@ -7,6 +7,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmplo
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderStatusCannotChangedException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.StatusInvalidException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.fpi.TwilioFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
@@ -70,6 +71,9 @@ public class OrderUseCase implements OrderServicePort {
 
     @Override
     public void updateOrderStatus(Long idOrder, String status) {
+        if (isInvalidStatus(status)) {
+            throw new StatusInvalidException();
+        }
         if (!orderPersistencePort.existsOrderById(idOrder)) {
             throw new OrderNotFoundException();
         }
@@ -105,6 +109,16 @@ public class OrderUseCase implements OrderServicePort {
 
         orderDb.setStatus(status.toUpperCase());
         orderPersistencePort.updateOrder(orderDb);
+    }
+
+    private boolean isInvalidStatus(String status) {
+        return switch (status.toUpperCase()) {
+            case Constants.PENDING_STATUS, Constants.CANCELED_STATUS,
+                    Constants.PREPARING_STATUS, Constants.READY_STATUS,
+                    Constants.DELIVERED_STATUS ->
+                    false;
+            default -> true;
+        };
     }
 
 }

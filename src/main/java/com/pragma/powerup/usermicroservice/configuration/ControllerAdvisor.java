@@ -19,6 +19,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyEx
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RoleNotAllowedForCreationException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.StatusInvalidException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserHasNoEmployeeRoleException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
@@ -57,6 +58,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.RESTAURANT_OWNER_ID_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ROLE_NOT_ALLOWED_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.STATUS_INVALID_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.USER_HAS_NO_EMPLOYEE_ROLE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.USER_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.WRONG_CREDENTIALS_MESSAGE;
@@ -212,6 +214,12 @@ public class ControllerAdvisor {
             OrderStatusCannotChangedException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_STATUS_CANNOT_CHANGE_MESSAGE));
+    }
+    @ExceptionHandler(StatusInvalidException.class)
+    public ResponseEntity<Map<String, String>> handleStatusInvalidException(
+            StatusInvalidException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, STATUS_INVALID_MESSAGE));
     }
     @ExceptionHandler(TwilioFeignClientException.class)
     public ResponseEntity<Map<String, String>> handleTwilioFeignClientException(
