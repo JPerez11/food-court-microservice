@@ -11,10 +11,12 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.OrderStatusCannotCh
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.StatusInvalidException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.fpi.TraceabilityFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.TwilioFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
 import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.model.TraceabilityModel;
 import com.pragma.powerup.usermicroservice.domain.model.TwilioModel;
 import com.pragma.powerup.usermicroservice.domain.model.UserModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
@@ -28,11 +30,13 @@ public class OrderUseCase implements OrderServicePort {
     private final OrderPersistencePort orderPersistencePort;
     private final UserFeignClientPort userFeignClientPort;
     private final TwilioFeignClientPort twilioFeignClientPort;
+    private final TraceabilityFeignClientPort traceabilityFeignClientPort;
 
-    public OrderUseCase(OrderPersistencePort orderPersistencePort, UserFeignClientPort userFeignClientPort, TwilioFeignClientPort twilioFeignClientPort) {
+    public OrderUseCase(OrderPersistencePort orderPersistencePort, UserFeignClientPort userFeignClientPort, TwilioFeignClientPort twilioFeignClientPort, TraceabilityFeignClientPort traceabilityFeignClientPort) {
         this.orderPersistencePort = orderPersistencePort;
         this.userFeignClientPort = userFeignClientPort;
         this.twilioFeignClientPort = twilioFeignClientPort;
+        this.traceabilityFeignClientPort = traceabilityFeignClientPort;
     }
 
     @Override
@@ -66,29 +70,31 @@ public class OrderUseCase implements OrderServicePort {
     }
 
     @Override
-    public void assignEmployee(Long id) {
-        if (!orderPersistencePort.existsOrderById(id)) {
+    public void assignEmployee(Long orderId) {
+        if (!orderPersistencePort.existsOrderById(orderId)) {
             throw new OrderNotFoundException();
         }
-        OrderModel orderDb = orderPersistencePort.getOrderById(id);
+        OrderModel orderDb = recoverOrder(orderId);
         if (orderDb == null) {
             throw new NullPointerException();
         }
         Long idEmployee = orderPersistencePort.getAuthenticatedUserId();
         orderDb.setIdEmployee(idEmployee);
+        registerTraceability(orderDb, Constants.PREPARING_STATUS);
         orderDb.setStatus(Constants.PREPARING_STATUS);
+
         orderPersistencePort.updateOrder(orderDb);
     }
 
     @Override
-    public void updateOrderStatus(Long idOrder, String status) {
+    public void updateOrderStatus(Long orderId, String status) {
         if (isInvalidStatus(status)) {
             throw new StatusInvalidException();
         }
-        if (!orderPersistencePort.existsOrderById(idOrder)) {
+        if (!orderPersistencePort.existsOrderById(orderId)) {
             throw new OrderNotFoundException();
         }
-        OrderModel orderDb = orderPersistencePort.getOrderById(idOrder);
+        OrderModel orderDb = recoverOrder(orderId);
         if (orderDb == null) {
             throw new NullPointerException();
         }
@@ -105,7 +111,7 @@ public class OrderUseCase implements OrderServicePort {
             throw new OrderStatusCannotChangedException();
         }
 
-        UserModel userModel = userFeignClientPort.getUserById(orderDb.getIdCustomer());
+        UserModel userModel = recoverUser(orderDb.getIdCustomer());
         if (userModel == null) {
             throw new UserNotFoundException();
         }
@@ -123,6 +129,8 @@ public class OrderUseCase implements OrderServicePort {
             throw new OrderStatusCannotChangedException();
         }
 
+        registerTraceability(orderDb, status);
+
         orderDb.setStatus(status.toUpperCase());
         orderPersistencePort.updateOrder(orderDb);
     }
@@ -132,7 +140,7 @@ public class OrderUseCase implements OrderServicePort {
         if (!orderPersistencePort.existsOrderById(orderId)) {
             throw new OrderNotFoundException();
         }
-        OrderModel orderDb = orderPersistencePort.getOrderById(orderId);
+        OrderModel orderDb = recoverOrder(orderId);
         if (orderDb == null) {
             throw new NullPointerException();
         }
@@ -140,7 +148,7 @@ public class OrderUseCase implements OrderServicePort {
         if (!Objects.equals(orderDb.getIdCustomer(), customerId)) {
             throw new OrderNotBelongCustomerException();
         }
-        UserModel userModel = userFeignClientPort.getUserById(customerId);
+        UserModel userModel = recoverUser(customerId);
         if (userModel == null) {
             throw new UserNotFoundException();
         }
@@ -151,6 +159,9 @@ public class OrderUseCase implements OrderServicePort {
             );
             throw new OrderCannotBeCanceledException();
         }
+
+        registerTraceability(orderDb, Constants.CANCELED_STATUS);
+
         orderPersistencePort.cancelOrder(orderId);
     }
 
@@ -161,6 +172,30 @@ public class OrderUseCase implements OrderServicePort {
                     -> false;
             default -> true;
         };
+    }
+
+    private void registerTraceability(OrderModel orderDb, String newStatus) {
+        UserModel customer = recoverUser( orderDb.getIdCustomer() );
+        UserModel employee = recoverUser( orderDb.getIdEmployee() );
+        TraceabilityModel traceability = new TraceabilityModel();
+
+        traceability.setOrderId( orderDb.getId() );
+        traceability.setCustomerId( customer.getId() );
+        traceability.setCustomerEmail( customer.getEmail() );
+        traceability.setPreviousStatus( orderDb.getStatus() );
+        traceability.setNewStatus( newStatus );
+        traceability.setEmployeeId( employee.getId() );
+        traceability.setEmployeeEmail( employee.getEmail() );
+
+        traceabilityFeignClientPort.saveHistory(traceability);
+    }
+
+    private UserModel recoverUser(Long id) {
+        return userFeignClientPort.getUserById(id);
+    }
+
+    private OrderModel recoverOrder(Long id) {
+        return orderPersistencePort.getOrderById(id);
     }
 
 }

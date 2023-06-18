@@ -1,9 +1,12 @@
 package com.pragma.powerup.usermicroservice.configuration;
 
+import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.TraceabilityFeignClientAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.TwilioFeignClientAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.UserFeignClientAdapter;
+import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.impl.TraceabilityFeignClientAdapterImpl;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.impl.TwilioFeignClientAdapterImpl;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.impl.UserFeignClientAdapterImpl;
+import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.TraceabilityDtoMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.TwilioRequestMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.UserResponseMapper;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.DishMysqlAdapter;
@@ -28,6 +31,7 @@ import com.pragma.powerup.usermicroservice.domain.api.OrderDishServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantEmployeeServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantServicePort;
+import com.pragma.powerup.usermicroservice.domain.fpi.TraceabilityFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.TwilioFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.spi.DishPersistencePort;
@@ -63,6 +67,8 @@ public class BeanConfiguration {
     private final RestaurantEmployeeEntityMapper restaurantEmployeeEntityMapper;
     private final TwilioFeignClientAdapter twilioFeignClientAdapter;
     private final TwilioRequestMapper twilioRequestMapper;
+    private final TraceabilityFeignClientAdapter traceabilityFeignClientAdapter;
+    private final TraceabilityDtoMapper traceabilityDtoMapper;
 
     @Bean
     public RestaurantServicePort restaurantServicePort() {
@@ -87,7 +93,8 @@ public class BeanConfiguration {
     }
     @Bean
     public OrderServicePort orderServicePort() {
-        return new OrderUseCase(orderPersistencePort(), userFeignClientPort(), twilioFeignClientPort());
+        return new OrderUseCase(orderPersistencePort(), userFeignClientPort(),
+                twilioFeignClientPort(), traceabilityFeignClientPort());
     }
     @Bean
     public OrderDishPersistencePort orderDishPersistencePort() {
@@ -113,5 +120,9 @@ public class BeanConfiguration {
     @Bean
     public TwilioFeignClientPort twilioFeignClientPort() {
         return new TwilioFeignClientAdapterImpl(twilioFeignClientAdapter, twilioRequestMapper);
+    }
+    @Bean
+    public TraceabilityFeignClientPort traceabilityFeignClientPort() {
+        return new TraceabilityFeignClientAdapterImpl(traceabilityFeignClientAdapter, traceabilityDtoMapper);
     }
 }
