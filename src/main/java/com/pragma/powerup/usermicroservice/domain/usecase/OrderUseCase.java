@@ -4,6 +4,7 @@ import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmployeeException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCustomerException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderCannotBeCanceledException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderStatusCannotChangedException;
@@ -19,6 +20,7 @@ import com.pragma.powerup.usermicroservice.domain.model.UserModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 public class OrderUseCase implements OrderServicePort {
@@ -38,13 +40,21 @@ public class OrderUseCase implements OrderServicePort {
         if (restaurantId == null) {
             throw new NullPointerException();
         }
-        Long customerId = orderPersistencePort.getAuthenticatedUserId();
-        if (orderPersistencePort.existsOrderByCustomer(customerId)) {
-            throw new OrderAlreadyExistsException();
-        }
         if (!orderPersistencePort.existsRestaurantById(restaurantId)) {
             throw new RestaurantNotFoundException();
         }
+        Long customerId = orderPersistencePort.getAuthenticatedUserId();
+        List<OrderModel> orderDb = orderPersistencePort.findOrderByCustomerIdAndRestaurantId(customerId, restaurantId);
+        if (!orderDb.isEmpty()) {
+            for (OrderModel order :
+                    orderDb) {
+                if (!(order.getStatus().equalsIgnoreCase(Constants.CANCELED_STATUS) ||
+                    order.getStatus().equalsIgnoreCase(Constants.DELIVERED_STATUS))) {
+                    throw new OrderAlreadyExistsException();
+                }
+            }
+        }
+
         RestaurantModel restaurantModel = new RestaurantModel();
         restaurantModel.setId(restaurantId);
         OrderModel orderModel = new OrderModel();
@@ -82,7 +92,7 @@ public class OrderUseCase implements OrderServicePort {
         if (orderDb == null) {
             throw new NullPointerException();
         }
-        if (!orderDb.getStatus().equalsIgnoreCase(Constants.PENDING_STATUS) ||
+        if (!orderDb.getStatus().equalsIgnoreCase(Constants.PENDING_STATUS) &&
                 status.equalsIgnoreCase(Constants.CANCELED_STATUS)) {
             throw new OrderCannotBeCanceledException();
         }
@@ -119,7 +129,28 @@ public class OrderUseCase implements OrderServicePort {
 
     @Override
     public void cancelOrder(Long orderId) {
-
+        if (!orderPersistencePort.existsOrderById(orderId)) {
+            throw new OrderNotFoundException();
+        }
+        OrderModel orderDb = orderPersistencePort.getOrderById(orderId);
+        if (orderDb == null) {
+            throw new NullPointerException();
+        }
+        Long customerId = orderPersistencePort.getAuthenticatedUserId();
+        if (!Objects.equals(orderDb.getIdCustomer(), customerId)) {
+            throw new OrderNotBelongCustomerException();
+        }
+        UserModel userModel = userFeignClientPort.getUserById(customerId);
+        if (userModel == null) {
+            throw new UserNotFoundException();
+        }
+        if (!orderDb.getStatus().equalsIgnoreCase(Constants.PENDING_STATUS)) {
+            twilioFeignClientPort.sendMessage(new TwilioModel(
+                    Constants.ORDER_PREPARING_NOTIFICATION_MESSAGE,
+                    userModel.getPhoneNumber())
+            );
+            throw new OrderCannotBeCanceledException();
+        }
         orderPersistencePort.cancelOrder(orderId);
     }
 

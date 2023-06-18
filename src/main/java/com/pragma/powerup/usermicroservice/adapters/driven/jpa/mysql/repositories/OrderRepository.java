@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
     boolean existsByIdAndIdCustomer(Long idOrder, Long idCustomer);
-    boolean existsByIdCustomerAndStatusContainingIgnoreCase(Long idCustomer, String status);
+
+    List<OrderEntity> findAllByIdCustomerAndRestaurantEntityId(Long customerId, Long restaurantId);
     boolean existsByIdAndIdCustomerAndStatusContainingIgnoreCase(Long idOrder, Long idCustomer, String status);
     boolean existsByIdEmployee(Long idEmployee);
 

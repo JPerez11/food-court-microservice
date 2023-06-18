@@ -4,11 +4,12 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.Ord
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.OrderRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.utils.ExtractAuthorization;
-import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Transactional
@@ -25,10 +26,10 @@ public class OrderMysqlAdapter implements OrderPersistencePort {
     }
 
     @Override
-    public boolean existsOrderByCustomer(Long id) {
-        return orderRepository.existsByIdCustomerAndStatusContainingIgnoreCase(
-                id,
-                Constants.PENDING_STATUS);
+    public List<OrderModel> findOrderByCustomerIdAndRestaurantId(Long customerId, Long restaurantId) {
+        return orderEntityMapper.toModelList(
+                orderRepository.findAllByIdCustomerAndRestaurantEntityId(customerId,
+                restaurantId));
     }
 
     @Override

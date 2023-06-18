@@ -54,6 +54,7 @@ public class Constants {
     public static final String READY_STATUS = "READY";
     public static final String DELIVERED_STATUS = "DELIVERED";
     public static final String ORDER_READY_NOTIFICATION_MESSAGE = "The order is now ready!";
+    public static final String ORDER_PREPARING_NOTIFICATION_MESSAGE = "Sorry, your order is already in preparation and cannot be canceled";
     public static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
