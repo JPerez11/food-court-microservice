@@ -5,6 +5,7 @@ import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmployeeException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderCannotBeCanceledException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderStatusCannotChangedException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.StatusInvalidException;
@@ -81,11 +82,16 @@ public class OrderUseCase implements OrderServicePort {
         if (orderDb == null) {
             throw new NullPointerException();
         }
+        if (!orderDb.getStatus().equalsIgnoreCase(Constants.PENDING_STATUS) ||
+                status.equalsIgnoreCase(Constants.CANCELED_STATUS)) {
+            throw new OrderCannotBeCanceledException();
+        }
         Long idEmployee = orderPersistencePort.getAuthenticatedUserId();
         if (!Objects.equals(orderDb.getIdEmployee(), idEmployee)) {
             throw new OrderNotAssignEmployeeException();
         }
-        if (orderDb.getStatus().equalsIgnoreCase(Constants.DELIVERED_STATUS)) {
+        if (orderDb.getStatus().equalsIgnoreCase(Constants.DELIVERED_STATUS) ||
+                orderDb.getStatus().equalsIgnoreCase(Constants.CANCELED_STATUS)) {
             throw new OrderStatusCannotChangedException();
         }
 
@@ -113,10 +119,9 @@ public class OrderUseCase implements OrderServicePort {
 
     private boolean isInvalidStatus(String status) {
         return switch (status.toUpperCase()) {
-            case Constants.PENDING_STATUS, Constants.CANCELED_STATUS,
-                    Constants.PREPARING_STATUS, Constants.READY_STATUS,
-                    Constants.DELIVERED_STATUS ->
-                    false;
+            case Constants.PENDING_STATUS, Constants.PREPARING_STATUS,
+                    Constants.READY_STATUS, Constants.DELIVERED_STATUS
+                    -> false;
             default -> true;
         };
     }

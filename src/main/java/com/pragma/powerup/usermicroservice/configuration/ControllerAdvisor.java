@@ -1,6 +1,7 @@
 package com.pragma.powerup.usermicroservice.configuration;
 
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.exceptions.TwilioFeignClientException;
+import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotBelongRestaurantException;
@@ -13,6 +14,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmplo
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCustomerException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderReceivesNoMoreDishesException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.OrderCannotBeCanceledException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderStatusCannotChangedException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantAlreadyExistsException;
@@ -47,6 +49,7 @@ import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.EMPLOYEE_NO_ORDERS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.NO_DATA_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_ALREADY_EXISTS_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_CANNOT_BE_CANCELED_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_ASSIGN_EMPLOYEE_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_BELONG_CUSTOMER_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.ORDER_NOT_FOUND_MESSAGE;
@@ -205,15 +208,28 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, domainException.getException()));
     }
     @ExceptionHandler(FeignException.class)
-    public ResponseEntity<String> handleFeignException(FeignException feignException) {
-        return ResponseEntity.status(feignException.status())
-                .body(feignException.contentUTF8());
+    public ResponseEntity<Map<String, String>> handleFeignException(FeignException feignException) throws InterruptedException {
+        int status = HttpStatus.REQUEST_TIMEOUT.value();
+        String message = Constants.FEIGN_CLIENT_MESSAGE;
+        if (feignException.status() > 100) {
+            status = feignException.status();
+            message = feignException.contentUTF8();
+        }
+        Thread.sleep(1000);
+        return ResponseEntity.status(status)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, message));
     }
     @ExceptionHandler(OrderStatusCannotChangedException.class)
     public ResponseEntity<Map<String, String>> handleOrderStatusCannotChangeException(
             OrderStatusCannotChangedException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_STATUS_CANNOT_CHANGE_MESSAGE));
+    }
+    @ExceptionHandler(OrderCannotBeCanceledException.class)
+    public ResponseEntity<Map<String, String>> handleOrderCannotBeCanceledException(
+            OrderCannotBeCanceledException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_CANNOT_BE_CANCELED_MESSAGE));
     }
     @ExceptionHandler(StatusInvalidException.class)
     public ResponseEntity<Map<String, String>> handleStatusInvalidException(

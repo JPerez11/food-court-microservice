@@ -43,7 +43,9 @@ public class Constants {
     public static final String EMPLOYEE_ALREADY_ASSIGNED_MESSAGE = "The employee is already assigned to a restaurant";
     public static final String USER_HAS_NO_EMPLOYEE_ROLE_MESSAGE = "User has no employee role";
     public static final String ORDER_STATUS_CANNOT_CHANGE_MESSAGE = "Order status cannot be changed";
+    public static final String ORDER_CANNOT_BE_CANCELED_MESSAGE = "The order cannot be canceled";
     public static final String STATUS_INVALID_MESSAGE = "The status provided is invalid";
+    public static final String FEIGN_CLIENT_MESSAGE = "An error occurred while trying to consume a service";
     public static final String CONFLICT_TWILIO_FEIGN_MESSAGE = "An error occurred with the Twilio service";
     public static final String PENDING_STATUS = "PENDING";
     public static final String CANCELED_STATUS = "CANCELED";
