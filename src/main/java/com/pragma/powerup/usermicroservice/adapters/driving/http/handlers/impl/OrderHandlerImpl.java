@@ -25,4 +25,9 @@ public class OrderHandlerImpl implements OrderHandler {
     public void updateOrderStatus(Long id, String status) {
         orderServicePort.updateOrderStatus(id, status);
     }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+        orderServicePort.cancelOrder(orderId);
+    }
 }

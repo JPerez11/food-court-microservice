@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -146,6 +147,26 @@ public class OrderRestController {
                 .body(Collections.singletonMap(
                         Constants.RESPONSE_MESSAGE_KEY,
                         Constants.STATUS_UPDATED_MESSAGE));
+    }
+    @Secured({Constants.CUSTOMER_ROLE_NAME})
+    @Operation(summary = "Cancel order",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Order canceled successfully",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "Order not found",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "409", description = "Conflict",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(ref = "#/components/schemas/Error")))})
+    @DeleteMapping("/cancel/{id}")
+    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable Long id) {
+        orderHandler.cancelOrder(id);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(
+                        Constants.RESPONSE_MESSAGE_KEY,
+                        Constants.ORDER_CANCELED_MESSAGE));
     }
 
 }

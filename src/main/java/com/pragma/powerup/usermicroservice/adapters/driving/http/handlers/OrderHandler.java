@@ -5,5 +5,6 @@ public interface OrderHandler {
     void createOrder(Long restaurantId);
     void assignEmployee(Long id);
     void updateOrderStatus(Long id, String status);
+    void cancelOrder(Long orderId);
 
 }

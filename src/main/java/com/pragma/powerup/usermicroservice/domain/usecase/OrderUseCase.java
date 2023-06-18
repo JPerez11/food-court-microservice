@@ -103,7 +103,7 @@ public class OrderUseCase implements OrderServicePort {
         if (status.equalsIgnoreCase(Constants.READY_STATUS)) {
             twilioFeignClientPort.sendMessage(
                     new TwilioModel(
-                    Constants.NOTIFICATION_MESSAGE,
+                    Constants.ORDER_READY_NOTIFICATION_MESSAGE,
                     userModel.getPhoneNumber())
             );
         }

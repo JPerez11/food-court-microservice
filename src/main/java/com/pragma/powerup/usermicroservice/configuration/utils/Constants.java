@@ -32,6 +32,7 @@ public class Constants {
     public static final String ORDER_CREATED_MESSAGE = "Order created successfully";
     public static final String ASSIGN_EMPLOYEE_MESSAGE = "Employee assignment successfully";
     public static final String STATUS_UPDATED_MESSAGE = "Order status updated successfully";
+    public static final String ORDER_CANCELED_MESSAGE = "Order canceled successfully";
     public static final String ORDER_DETAIL_CREATED_MESSAGE = "Order detail created successfully";
     public static final String ORDER_ALREADY_EXISTS_MESSAGE = "Order already exists";
     public static final String ORDER_NOT_FOUND_MESSAGE = "Order not found";
@@ -52,7 +53,7 @@ public class Constants {
     public static final String PREPARING_STATUS = "PREPARING";
     public static final String READY_STATUS = "READY";
     public static final String DELIVERED_STATUS = "DELIVERED";
-    public static final String NOTIFICATION_MESSAGE = "The order is now ready!";
+    public static final String ORDER_READY_NOTIFICATION_MESSAGE = "The order is now ready!";
     public static final String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXvCJ9";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
