@@ -57,4 +57,9 @@ public class OrderMysqlAdapter implements OrderPersistencePort {
     public boolean existsRestaurantById(Long restaurantId) {
         return restaurantRepository.existsById(restaurantId);
     }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+        orderRepository.cancelOrder(orderId);
+    }
 }

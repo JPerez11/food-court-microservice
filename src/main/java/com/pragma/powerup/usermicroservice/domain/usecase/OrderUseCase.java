@@ -117,6 +117,12 @@ public class OrderUseCase implements OrderServicePort {
         orderPersistencePort.updateOrder(orderDb);
     }
 
+    @Override
+    public void cancelOrder(Long orderId) {
+
+        orderPersistencePort.cancelOrder(orderId);
+    }
+
     private boolean isInvalidStatus(String status) {
         return switch (status.toUpperCase()) {
             case Constants.PENDING_STATUS, Constants.PREPARING_STATUS,
