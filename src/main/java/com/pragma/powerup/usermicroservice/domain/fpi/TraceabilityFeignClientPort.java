@@ -8,5 +8,6 @@ public interface TraceabilityFeignClientPort {
 
     void saveHistory(TraceabilityModel traceabilityModel);
     List<TraceabilityModel> getTraceability(Long customerId);
+    Long getAuthenticatedUserId();
 
 }

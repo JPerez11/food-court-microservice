@@ -15,5 +15,6 @@ public interface TraceabilityDtoMapper {
     TraceabilityModel toModel(TraceabilityDto traceabilityDto);
     TraceabilityDto toDto(TraceabilityModel traceabilityModel);
     List<TraceabilityModel> toModelList(List<TraceabilityDto> traceabilityDtoList);
+    List<TraceabilityDto> toDtoList(List<TraceabilityModel> traceabilityModelList);
 
 }

@@ -3,6 +3,7 @@ package com.pragma.powerup.usermicroservice.adapters.driven.feign.client.impl;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.TraceabilityFeignClientAdapter;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.dto.TraceabilityDto;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.TraceabilityDtoMapper;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.utils.ExtractAuthorization;
 import com.pragma.powerup.usermicroservice.domain.fpi.TraceabilityFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.models.TraceabilityModel;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,10 @@ public class TraceabilityFeignClientAdapterImpl implements TraceabilityFeignClie
             return Collections.emptyList();
         }
         return traceabilityDtoMapper.toModelList(response.getBody());
+    }
+
+    @Override
+    public Long getAuthenticatedUserId() {
+        return ExtractAuthorization.getAuthenticatedUserId();
     }
 }

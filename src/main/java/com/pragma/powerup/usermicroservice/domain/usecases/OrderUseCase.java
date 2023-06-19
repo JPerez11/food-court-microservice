@@ -180,11 +180,11 @@ public class OrderUseCase implements OrderServicePort {
         TraceabilityModel traceability = new TraceabilityModel();
 
         traceability.setOrderId( orderDb.getId() );
-        traceability.setCustomerId( customer.getId() );
+        traceability.setCustomerId( orderDb.getIdCustomer() );
         traceability.setCustomerEmail( customer.getEmail() );
         traceability.setPreviousStatus( orderDb.getStatus() );
         traceability.setNewStatus( newStatus );
-        traceability.setEmployeeId( employee.getId() );
+        traceability.setEmployeeId( orderDb.getIdEmployee() );
         traceability.setEmployeeEmail( employee.getEmail() );
 
         traceabilityFeignClientPort.saveHistory(traceability);

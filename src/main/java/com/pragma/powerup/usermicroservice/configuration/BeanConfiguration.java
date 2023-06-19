@@ -31,6 +31,7 @@ import com.pragma.powerup.usermicroservice.domain.api.OrderDishServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantEmployeeServicePort;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantServicePort;
+import com.pragma.powerup.usermicroservice.domain.api.TraceabilityServicePort;
 import com.pragma.powerup.usermicroservice.domain.fpi.TraceabilityFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.TwilioFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
@@ -44,6 +45,7 @@ import com.pragma.powerup.usermicroservice.domain.usecases.OrderDishUseCase;
 import com.pragma.powerup.usermicroservice.domain.usecases.OrderUseCase;
 import com.pragma.powerup.usermicroservice.domain.usecases.RestaurantEmployeeUseCase;
 import com.pragma.powerup.usermicroservice.domain.usecases.RestaurantUseCase;
+import com.pragma.powerup.usermicroservice.domain.usecases.TraceabilityUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -124,5 +126,9 @@ public class BeanConfiguration {
     @Bean
     public TraceabilityFeignClientPort traceabilityFeignClientPort() {
         return new TraceabilityFeignClientAdapterImpl(traceabilityFeignClientAdapter, traceabilityDtoMapper);
+    }
+    @Bean
+    public TraceabilityServicePort traceabilityServicePort() {
+        return new TraceabilityUseCase(traceabilityFeignClientPort());
     }
 }
