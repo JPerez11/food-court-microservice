@@ -4,7 +4,7 @@ import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.TwilioFe
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.exceptions.TwilioFeignClientException;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.TwilioRequestMapper;
 import com.pragma.powerup.usermicroservice.domain.fpi.TwilioFeignClientPort;
-import com.pragma.powerup.usermicroservice.domain.model.TwilioModel;
+import com.pragma.powerup.usermicroservice.domain.models.TwilioModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

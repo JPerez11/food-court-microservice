@@ -1,7 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper;
 
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.dto.TwilioRequestDto;
-import com.pragma.powerup.usermicroservice.domain.model.TwilioModel;
+import com.pragma.powerup.usermicroservice.domain.models.TwilioModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

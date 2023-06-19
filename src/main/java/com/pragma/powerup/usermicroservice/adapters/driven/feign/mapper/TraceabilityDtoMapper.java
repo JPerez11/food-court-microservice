@@ -1,7 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper;
 
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.dto.TraceabilityDto;
-import com.pragma.powerup.usermicroservice.domain.model.TraceabilityModel;
+import com.pragma.powerup.usermicroservice.domain.models.TraceabilityModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

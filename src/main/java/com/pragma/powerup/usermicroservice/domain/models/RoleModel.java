@@ -1,4 +1,4 @@
-package com.pragma.powerup.usermicroservice.domain.model;
+package com.pragma.powerup.usermicroservice.domain.models;
 
 /**
  * @author Author Jhoan Perez

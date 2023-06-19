@@ -1,7 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.mapper;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.DishResponseDto;
-import com.pragma.powerup.usermicroservice.domain.model.DishModel;
+import com.pragma.powerup.usermicroservice.domain.models.DishModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

@@ -1,7 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers;
 
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
-import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
+import com.pragma.powerup.usermicroservice.domain.models.OrderModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

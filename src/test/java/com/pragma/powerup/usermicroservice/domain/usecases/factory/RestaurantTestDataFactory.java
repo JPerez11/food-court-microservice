@@ -1,8 +1,8 @@
-package com.pragma.powerup.usermicroservice.domain.usecase.factory;
+package com.pragma.powerup.usermicroservice.domain.usecases.factory;
 
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
-import com.pragma.powerup.usermicroservice.domain.model.RoleModel;
-import com.pragma.powerup.usermicroservice.domain.model.UserModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.models.RoleModel;
+import com.pragma.powerup.usermicroservice.domain.models.UserModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

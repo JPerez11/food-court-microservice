@@ -1,4 +1,4 @@
-package com.pragma.powerup.usermicroservice.domain.usecase;
+package com.pragma.powerup.usermicroservice.domain.usecases;
 
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
@@ -9,8 +9,8 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantOwnerIdEx
 import com.pragma.powerup.usermicroservice.domain.exceptions.RoleNotAllowedForCreationException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
-import com.pragma.powerup.usermicroservice.domain.model.UserModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.models.UserModel;
 import com.pragma.powerup.usermicroservice.domain.spi.RestaurantPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.validations.RestaurantValidation;
 

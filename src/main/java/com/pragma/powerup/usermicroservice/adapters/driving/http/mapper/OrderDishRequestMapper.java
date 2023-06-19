@@ -1,7 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.mapper;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.OrderDishRequestDto;
-import com.pragma.powerup.usermicroservice.domain.model.OrderDishModel;
+import com.pragma.powerup.usermicroservice.domain.models.OrderDishModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

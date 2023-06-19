@@ -1,6 +1,6 @@
 package com.pragma.powerup.usermicroservice.domain.api;
 
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantModel;
 
 import java.util.List;
 

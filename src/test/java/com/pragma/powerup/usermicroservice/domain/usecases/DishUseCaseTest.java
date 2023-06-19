@@ -1,16 +1,16 @@
-package com.pragma.powerup.usermicroservice.domain.usecase;
+package com.pragma.powerup.usermicroservice.domain.usecases;
 
 import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
-import com.pragma.powerup.usermicroservice.domain.model.CategoryModel;
-import com.pragma.powerup.usermicroservice.domain.model.DishModel;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.models.CategoryModel;
+import com.pragma.powerup.usermicroservice.domain.models.DishModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantModel;
 import com.pragma.powerup.usermicroservice.domain.spi.DishPersistencePort;
-import com.pragma.powerup.usermicroservice.domain.usecase.factory.DishTestDataFactory;
-import com.pragma.powerup.usermicroservice.domain.usecase.factory.RestaurantTestDataFactory;
+import com.pragma.powerup.usermicroservice.domain.usecases.factory.DishTestDataFactory;
+import com.pragma.powerup.usermicroservice.domain.usecases.factory.RestaurantTestDataFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

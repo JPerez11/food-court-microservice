@@ -4,7 +4,7 @@ import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.Traceabi
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.dto.TraceabilityDto;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.TraceabilityDtoMapper;
 import com.pragma.powerup.usermicroservice.domain.fpi.TraceabilityFeignClientPort;
-import com.pragma.powerup.usermicroservice.domain.model.TraceabilityModel;
+import com.pragma.powerup.usermicroservice.domain.models.TraceabilityModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

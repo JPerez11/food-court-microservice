@@ -9,8 +9,8 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositorie
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantEmployeeRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.utils.ExtractAuthorization;
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
-import com.pragma.powerup.usermicroservice.domain.model.OrderDishModel;
-import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
+import com.pragma.powerup.usermicroservice.domain.models.OrderDishModel;
+import com.pragma.powerup.usermicroservice.domain.models.OrderModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderDishPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

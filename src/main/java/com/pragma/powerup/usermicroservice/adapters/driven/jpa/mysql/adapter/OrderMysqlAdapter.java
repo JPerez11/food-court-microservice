@@ -4,7 +4,7 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.Ord
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.OrderRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.utils.ExtractAuthorization;
-import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
+import com.pragma.powerup.usermicroservice.domain.models.OrderModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

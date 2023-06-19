@@ -4,7 +4,7 @@ import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers.Res
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantEmployeeRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.repositories.RestaurantRepository;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.utils.ExtractAuthorization;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantEmployeeModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantEmployeeModel;
 import com.pragma.powerup.usermicroservice.domain.spi.RestaurantEmployeePersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

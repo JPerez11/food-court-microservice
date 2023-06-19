@@ -1,4 +1,4 @@
-package com.pragma.powerup.usermicroservice.domain.usecase;
+package com.pragma.powerup.usermicroservice.domain.usecases;
 
 import com.pragma.powerup.usermicroservice.domain.api.OrderDishServicePort;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotBelongRestaurantException;
@@ -8,7 +8,7 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCusto
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderReceivesNoMoreDishesException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
-import com.pragma.powerup.usermicroservice.domain.model.OrderDishModel;
+import com.pragma.powerup.usermicroservice.domain.models.OrderDishModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderDishPersistencePort;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.pragma.powerup.usermicroservice.domain.spi;
 
-import com.pragma.powerup.usermicroservice.domain.model.CategoryModel;
-import com.pragma.powerup.usermicroservice.domain.model.DishModel;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.models.CategoryModel;
+import com.pragma.powerup.usermicroservice.domain.models.DishModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantModel;
 
 import java.util.List;
 

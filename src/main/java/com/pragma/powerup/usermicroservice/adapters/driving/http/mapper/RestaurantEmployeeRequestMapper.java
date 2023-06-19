@@ -1,7 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.mapper;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.RestaurantEmployeeRequestDto;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantEmployeeModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantEmployeeModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

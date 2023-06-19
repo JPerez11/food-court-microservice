@@ -1,4 +1,4 @@
-package com.pragma.powerup.usermicroservice.domain.usecase;
+package com.pragma.powerup.usermicroservice.domain.usecases;
 
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
@@ -14,11 +14,11 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundExcepti
 import com.pragma.powerup.usermicroservice.domain.fpi.TraceabilityFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.TwilioFeignClientPort;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
-import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
-import com.pragma.powerup.usermicroservice.domain.model.TraceabilityModel;
-import com.pragma.powerup.usermicroservice.domain.model.TwilioModel;
-import com.pragma.powerup.usermicroservice.domain.model.UserModel;
+import com.pragma.powerup.usermicroservice.domain.models.OrderModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.models.TraceabilityModel;
+import com.pragma.powerup.usermicroservice.domain.models.TwilioModel;
+import com.pragma.powerup.usermicroservice.domain.models.UserModel;
 import com.pragma.powerup.usermicroservice.domain.spi.OrderPersistencePort;
 
 import java.time.LocalDateTime;

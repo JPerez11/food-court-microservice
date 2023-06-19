@@ -4,7 +4,7 @@ import com.pragma.powerup.usermicroservice.adapters.driven.feign.client.UserFeig
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.dto.UserResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.mapper.UserResponseMapper;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
-import com.pragma.powerup.usermicroservice.domain.model.UserModel;
+import com.pragma.powerup.usermicroservice.domain.models.UserModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

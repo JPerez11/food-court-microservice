@@ -2,8 +2,8 @@ package com.pragma.powerup.usermicroservice.adapters.driving.http.mapper;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.OrderDishResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.OrderResponseDto;
-import com.pragma.powerup.usermicroservice.domain.model.OrderDishModel;
-import com.pragma.powerup.usermicroservice.domain.model.OrderModel;
+import com.pragma.powerup.usermicroservice.domain.models.OrderDishModel;
+import com.pragma.powerup.usermicroservice.domain.models.OrderModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

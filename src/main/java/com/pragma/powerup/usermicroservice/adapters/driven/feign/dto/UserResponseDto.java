@@ -1,7 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driven.feign.dto;
 
 
-import com.pragma.powerup.usermicroservice.domain.model.RoleModel;
+import com.pragma.powerup.usermicroservice.domain.models.RoleModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

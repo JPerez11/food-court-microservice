@@ -1,6 +1,6 @@
 package com.pragma.powerup.usermicroservice.domain.fpi;
 
-import com.pragma.powerup.usermicroservice.domain.model.TraceabilityModel;
+import com.pragma.powerup.usermicroservice.domain.models.TraceabilityModel;
 
 import java.util.List;
 

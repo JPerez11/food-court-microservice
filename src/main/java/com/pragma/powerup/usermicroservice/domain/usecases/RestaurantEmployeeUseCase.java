@@ -1,4 +1,4 @@
-package com.pragma.powerup.usermicroservice.domain.usecase;
+package com.pragma.powerup.usermicroservice.domain.usecases;
 
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.api.RestaurantEmployeeServicePort;
@@ -8,8 +8,8 @@ import com.pragma.powerup.usermicroservice.domain.exceptions.RoleNotAllowedForCr
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserHasNoEmployeeRoleException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.fpi.UserFeignClientPort;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantEmployeeModel;
-import com.pragma.powerup.usermicroservice.domain.model.UserModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantEmployeeModel;
+import com.pragma.powerup.usermicroservice.domain.models.UserModel;
 import com.pragma.powerup.usermicroservice.domain.spi.RestaurantEmployeePersistencePort;
 
 import java.util.Objects;

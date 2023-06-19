@@ -1,7 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.mappers;
 
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.entity.CategoryEntity;
-import com.pragma.powerup.usermicroservice.domain.model.CategoryModel;
+import com.pragma.powerup.usermicroservice.domain.models.CategoryModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

@@ -1,6 +1,6 @@
 package com.pragma.powerup.usermicroservice.domain.fpi;
 
-import com.pragma.powerup.usermicroservice.domain.model.TwilioModel;
+import com.pragma.powerup.usermicroservice.domain.models.TwilioModel;
 
 public interface TwilioFeignClientPort {
 

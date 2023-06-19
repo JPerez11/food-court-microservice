@@ -1,13 +1,13 @@
-package com.pragma.powerup.usermicroservice.domain.usecase;
+package com.pragma.powerup.usermicroservice.domain.usecases;
 
 import com.pragma.powerup.usermicroservice.domain.api.DishServicePort;
 import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OwnerNotAuthorizedForUpdateException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.RestaurantNotFoundException;
-import com.pragma.powerup.usermicroservice.domain.model.CategoryModel;
-import com.pragma.powerup.usermicroservice.domain.model.DishModel;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.models.CategoryModel;
+import com.pragma.powerup.usermicroservice.domain.models.DishModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantModel;
 import com.pragma.powerup.usermicroservice.domain.spi.DishPersistencePort;
 import com.pragma.powerup.usermicroservice.domain.validations.DishValidation;
 

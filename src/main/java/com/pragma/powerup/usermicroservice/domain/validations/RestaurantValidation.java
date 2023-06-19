@@ -1,7 +1,7 @@
 package com.pragma.powerup.usermicroservice.domain.validations;
 
 import com.pragma.powerup.usermicroservice.domain.exceptions.ValidationModelException;
-import com.pragma.powerup.usermicroservice.domain.model.RestaurantModel;
+import com.pragma.powerup.usermicroservice.domain.models.RestaurantModel;
 
 import java.util.HashMap;
 import java.util.Map;
