@@ -23,4 +23,12 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     void cancelOrder(@Param("orderId") Long orderId);
     List<OrderEntity> findOrderEntitiesByIdCustomer(Long customerId);
     List<OrderEntity> findAllByRestaurantEntityIdOwnerAndEndTimeNotNull(Long restaurantId);
+
+    @Query("SELECT o.idEmployee, AVG(TIMESTAMPDIFF(second, o.startTime, o.endTime)) " +
+            "FROM OrderEntity o " +
+            "WHERE o.endTime IS NOT NULL " +
+            "AND o.restaurantEntity.id = :restaurantId " +
+            "GROUP BY o.idEmployee " +
+            "ORDER BY AVG(TIMESTAMPDIFF(second, o.startTime, o.endTime))")
+    List<Object[]> getAverageDurationPerEmployee(@Param("restaurantId") Long restaurantId);
 }

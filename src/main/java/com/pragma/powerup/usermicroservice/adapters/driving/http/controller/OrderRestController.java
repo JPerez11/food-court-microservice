@@ -1,6 +1,7 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.OrderDishRequestDto;
+import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.OrderRankingDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.OrderTimeResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.OrderDishHandler;
@@ -184,6 +185,12 @@ public class OrderRestController {
     @GetMapping("/period")
     public ResponseEntity<List<OrderTimeResponseDto>> showOrderTime() {
         return ResponseEntity.ok(orderHandler.showOrderTime());
+    }
+
+    @Secured({Constants.OWNER_ROLE_NAME})
+    @GetMapping("/ranking/{id}")
+    public ResponseEntity<List<OrderRankingDto>> orderRanking(@PathVariable Long id) {
+        return ResponseEntity.ok(orderHandler.orderRanking(id));
     }
 
 }

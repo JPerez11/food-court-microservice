@@ -75,4 +75,10 @@ public class OrderMysqlAdapter implements OrderPersistencePort {
                 orderRepository.findAllByRestaurantEntityIdOwnerAndEndTimeNotNull(ownerId)
         );
     }
+
+    @Override
+    public List<Object[]> orderRanking(Long restaurantId) {
+        return orderRepository.getAverageDurationPerEmployee(restaurantId);
+
+    }
 }

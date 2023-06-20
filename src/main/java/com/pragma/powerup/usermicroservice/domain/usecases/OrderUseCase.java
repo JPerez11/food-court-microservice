@@ -33,7 +33,9 @@ public class OrderUseCase implements OrderServicePort {
     private final TwilioFeignClientPort twilioFeignClientPort;
     private final TraceabilityFeignClientPort traceabilityFeignClientPort;
 
-    public OrderUseCase(OrderPersistencePort orderPersistencePort, UserFeignClientPort userFeignClientPort, TwilioFeignClientPort twilioFeignClientPort, TraceabilityFeignClientPort traceabilityFeignClientPort) {
+    public OrderUseCase(OrderPersistencePort orderPersistencePort, UserFeignClientPort userFeignClientPort,
+                        TwilioFeignClientPort twilioFeignClientPort,
+                        TraceabilityFeignClientPort traceabilityFeignClientPort) {
         this.orderPersistencePort = orderPersistencePort;
         this.userFeignClientPort = userFeignClientPort;
         this.twilioFeignClientPort = twilioFeignClientPort;
@@ -177,6 +179,11 @@ public class OrderUseCase implements OrderServicePort {
             throw new NoDataFoundException();
         }
         return ordersDb;
+    }
+
+    @Override
+    public List<Object[]> orderRanking(Long restaurantId) {
+        return orderPersistencePort.orderRanking(restaurantId);
     }
 
     private boolean isInvalidStatus(String status) {

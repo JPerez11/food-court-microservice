@@ -16,4 +16,5 @@ public interface OrderPersistencePort {
     void cancelOrder(Long orderId);
     List<OrderModel> findOrderByCustomerId(Long customerId);
     List<OrderModel> showOrderTime(Long ownerId);
+    List<Object[]> orderRanking(Long restaurantId);
 }

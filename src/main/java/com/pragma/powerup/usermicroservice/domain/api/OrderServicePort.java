@@ -11,5 +11,6 @@ public interface OrderServicePort {
     void updateOrderStatus(Long idOrder, String status);
     void cancelOrder(Long orderId);
     List<OrderModel> showOrderTime();
+    List<Object[]> orderRanking(Long restaurantId);
 
 }
