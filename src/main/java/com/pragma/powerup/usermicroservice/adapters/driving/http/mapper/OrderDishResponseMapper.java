@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.time.format.DateTimeFormatter.ofPattern;
+
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
@@ -35,7 +37,8 @@ public interface OrderDishResponseMapper {
             List<OrderDishModel> detailList = entry.getValue();
 
             OrderResponseDto orderResponseDto = new OrderResponseDto();
-            orderResponseDto.setDate(orderModel.getDate());
+            orderResponseDto.setStartTime(orderModel.getStartTime().format(ofPattern("yyyy-MM-dd HH:mm:ss")));
+            orderResponseDto.setEndTime( orderModel.getEndTime().format(ofPattern("yyyy-MM-dd HH:mm:ss")));
             orderResponseDto.setStatus(orderModel.getStatus());
             orderResponseDto.setIdCustomer(orderModel.getIdCustomer());
             orderResponseDto.setIdEmployee(orderModel.getIdEmployee());

@@ -2,6 +2,7 @@ package com.pragma.powerup.usermicroservice.domain.usecases;
 
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.api.OrderServicePort;
+import com.pragma.powerup.usermicroservice.domain.exceptions.NoDataFoundException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotAssignEmployeeException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.OrderNotBelongCustomerException;
@@ -63,7 +64,7 @@ public class OrderUseCase implements OrderServicePort {
         restaurantModel.setId(restaurantId);
         OrderModel orderModel = new OrderModel();
         orderModel.setIdCustomer(customerId);
-        orderModel.setDate(LocalDateTime.now());
+        orderModel.setStartTime(LocalDateTime.now());
         orderModel.setStatus(Constants.PENDING_STATUS);
         orderModel.setRestaurantModel(restaurantModel);
         orderPersistencePort.createOrder(orderModel);
@@ -129,6 +130,9 @@ public class OrderUseCase implements OrderServicePort {
             throw new OrderStatusCannotChangedException();
         }
 
+        if (status.equalsIgnoreCase(Constants.DELIVERED_STATUS)) {
+            orderDb.setEndTime(LocalDateTime.now());
+        }
         registerTraceability(orderDb, status);
 
         orderDb.setStatus(status.toUpperCase());
@@ -163,6 +167,16 @@ public class OrderUseCase implements OrderServicePort {
         registerTraceability(orderDb, Constants.CANCELED_STATUS);
 
         orderPersistencePort.cancelOrder(orderId);
+    }
+
+    @Override
+    public List<OrderModel> showOrderTime() {
+        Long ownerId = orderPersistencePort.getAuthenticatedUserId();
+        List<OrderModel> ordersDb = orderPersistencePort.showOrderTime(ownerId);
+        if (ordersDb.isEmpty()) {
+            throw new NoDataFoundException();
+        }
+        return ordersDb;
     }
 
     private boolean isInvalidStatus(String status) {

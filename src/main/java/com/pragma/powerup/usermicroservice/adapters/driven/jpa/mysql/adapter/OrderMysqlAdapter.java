@@ -68,4 +68,11 @@ public class OrderMysqlAdapter implements OrderPersistencePort {
     public List<OrderModel> findOrderByCustomerId(Long customerId) {
         return orderEntityMapper.toModelList(orderRepository.findOrderEntitiesByIdCustomer(customerId));
     }
+
+    @Override
+    public List<OrderModel> showOrderTime(Long ownerId) {
+        return orderEntityMapper.toModelList(
+                orderRepository.findAllByRestaurantEntityIdOwnerAndEndTimeNotNull(ownerId)
+        );
+    }
 }

@@ -7,18 +7,21 @@ public class OrderModel {
     private Long id;
     private Long idCustomer;
     private Long idEmployee;
-    private LocalDateTime date;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private String status;
     private RestaurantModel restaurantModel;
 
     public OrderModel() {}
 
-    public OrderModel(Long id, Long idCustomer, Long idEmployee, LocalDateTime date, String status,
+    public OrderModel(Long id, Long idCustomer, Long idEmployee, LocalDateTime startTime, LocalDateTime endTime,
+                      String status,
                       RestaurantModel restaurantModel) {
         this.id = id;
         this.idCustomer = idCustomer;
         this.idEmployee = idEmployee;
-        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.status = status;
         this.restaurantModel = restaurantModel;
     }
@@ -47,12 +50,20 @@ public class OrderModel {
         this.idEmployee = idEmployee;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public String getStatus() {

@@ -22,4 +22,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             "WHERE o.id = :orderId")
     void cancelOrder(@Param("orderId") Long orderId);
     List<OrderEntity> findOrderEntitiesByIdCustomer(Long customerId);
+    List<OrderEntity> findAllByRestaurantEntityIdOwnerAndEndTimeNotNull(Long restaurantId);
 }

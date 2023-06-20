@@ -15,4 +15,5 @@ public interface OrderPersistencePort {
     boolean existsRestaurantById(Long restaurantId);
     void cancelOrder(Long orderId);
     List<OrderModel> findOrderByCustomerId(Long customerId);
+    List<OrderModel> showOrderTime(Long ownerId);
 }

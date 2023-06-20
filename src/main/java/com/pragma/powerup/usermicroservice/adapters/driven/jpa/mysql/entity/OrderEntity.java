@@ -30,11 +30,14 @@ public class OrderEntity {
     private Long idCustomer;
     @Column(name = "id_employee")
     private Long idEmployee;
-    @Column(name = "creation_date", nullable = false)
-    private LocalDateTime date;
-    @Column(nullable = false)
+    @Column(name = "start_time", nullable = false)
+    private LocalDateTime startTime;
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
+    @Column(name = "status", nullable = false)
     private String status;
     @ManyToOne
     @JoinColumn(name = "id_restaurant", nullable = false)
     private RestaurantEntity restaurantEntity;
+
 }
