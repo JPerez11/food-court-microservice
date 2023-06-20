@@ -21,4 +21,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             "SET o.status = 'CANCELED' " +
             "WHERE o.id = :orderId")
     void cancelOrder(@Param("orderId") Long orderId);
+    List<OrderEntity> findOrderEntitiesByIdCustomer(Long customerId);
 }

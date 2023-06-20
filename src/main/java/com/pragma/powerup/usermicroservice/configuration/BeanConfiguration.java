@@ -129,6 +129,6 @@ public class BeanConfiguration {
     }
     @Bean
     public TraceabilityServicePort traceabilityServicePort() {
-        return new TraceabilityUseCase(traceabilityFeignClientPort());
+        return new TraceabilityUseCase(traceabilityFeignClientPort(), orderPersistencePort());
     }
 }

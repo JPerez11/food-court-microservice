@@ -3,6 +3,7 @@ package com.pragma.powerup.usermicroservice.configuration;
 import com.pragma.powerup.usermicroservice.adapters.driven.feign.exceptions.TwilioFeignClientException;
 import com.pragma.powerup.usermicroservice.configuration.utils.Constants;
 import com.pragma.powerup.usermicroservice.domain.exceptions.CategoryNotFoundException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.CustomerWithoutOrdersException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotBelongRestaurantException;
 import com.pragma.powerup.usermicroservice.domain.exceptions.DishNotFoundException;
@@ -42,6 +43,7 @@ import java.util.Map;
 
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.CATEGORY_NOT_FOUND_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.CONFLICT_TWILIO_FEIGN_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.CUSTOMER_WITHOUT_ORDERS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_ALREADY_EXISTS_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_BELONG_RESTAURANT_MESSAGE;
 import static com.pragma.powerup.usermicroservice.configuration.utils.Constants.DISH_NOT_FOUND_MESSAGE;
@@ -208,7 +210,8 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, domainException.getException()));
     }
     @ExceptionHandler(FeignException.class)
-    public ResponseEntity<Map<String, String>> handleFeignException(FeignException feignException) throws InterruptedException {
+    public ResponseEntity<Map<String, String>> handleFeignException(
+            FeignException feignException) throws InterruptedException {
         int status = HttpStatus.REQUEST_TIMEOUT.value();
         String message = Constants.FEIGN_CLIENT_MESSAGE;
         if (feignException.status() > 100) {
@@ -236,6 +239,12 @@ public class ControllerAdvisor {
             StatusInvalidException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, STATUS_INVALID_MESSAGE));
+    }
+    @ExceptionHandler(CustomerWithoutOrdersException.class)
+    public ResponseEntity<Map<String, String>> handleCustomerWithoutOrdersException(
+            CustomerWithoutOrdersException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CUSTOMER_WITHOUT_ORDERS_MESSAGE));
     }
     @ExceptionHandler(TwilioFeignClientException.class)
     public ResponseEntity<Map<String, String>> handleTwilioFeignClientException(

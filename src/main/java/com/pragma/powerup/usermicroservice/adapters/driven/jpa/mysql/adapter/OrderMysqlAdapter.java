@@ -63,4 +63,9 @@ public class OrderMysqlAdapter implements OrderPersistencePort {
     public void cancelOrder(Long orderId) {
         orderRepository.cancelOrder(orderId);
     }
+
+    @Override
+    public List<OrderModel> findOrderByCustomerId(Long customerId) {
+        return orderEntityMapper.toModelList(orderRepository.findOrderEntitiesByIdCustomer(customerId));
+    }
 }
